@@ -40,6 +40,7 @@ $(document).on('turbolinks:load', function() {
 
   // Replace suggested queries by saved queries
   if (savedDiv.length && queries.length) {
+    $('ul', savedDiv).html(''); // NOTE: required by turbolink on history back
     queries.sort().forEach(function(query) {
       $('ul', savedDiv).append('<li><a href="/?q=' + query + '">' + query + '</a></li>');
     });
