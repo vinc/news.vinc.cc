@@ -1,14 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>News</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title><%= content_for(:title) || 'Picture' %></title>
+
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="d-flex flex-column" style="min-height:100vh">
+    <nav class="navbar navbar-toggleable-xl navbar-inverse bg-primary">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <a class="navbar-brand" href="/">News</a>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <form method="get" action="/" style="width:100%">
+          <input name="q" value="<%= content_for(:query) %>" class="form-control" type="search" placeholder="Search">
+        </form>
+        <% if content_for(:save_button) %>
+          <button id="save-search" type="button" role="button" class="btn btn-outline-secondary ml-2" style="display:none">Save</button>
+        <% end %>
+      </div>
+    </nav>
+
+    <div class="container mt-4 mb-auto" style="max-width:44rem">
+      <% if alert %>
+        <div class="alert alert-danger" role="alert"><%= alert %></div>
+      <% end %>
+
+      <%= yield %>
+    </div>
+
+    <footer class="mt-4">
+      <p class="text-center text-muted">
+        <span>Built with &hearts; by <a href="https://vinc.cc" class="text-muted"><strong>vinc</strong></a>.</span>
+        <span>Code licensed <a href="https://github.com/vinc/news.vinc.cc/blob/master/LICENSE" class="text-muted"><strong>MIT</strong></a>.</span>
+      </p>
+    </footer>
   </body>
 </html>
