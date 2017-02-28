@@ -38,8 +38,8 @@ $(document).on('turbolinks:load', function() {
   var savedDiv = $('.saved-queries');
   var suggestedDiv = $('.suggested-queries');
 
-  // Replace suggested queries by saved queries
-  if (savedDiv.length && queries.length) {
+  // Replace suggested queries by saved queries on the home page
+  if ($('body#home').length && savedDiv.length && queries.length) {
     $('ul', savedDiv).html(''); // NOTE: required by turbolink on history back
     queries.sort().forEach(function(query) {
       $('ul', savedDiv).append('<li><a href="/search?q=' + query + '">' + query + '</a></li>');
