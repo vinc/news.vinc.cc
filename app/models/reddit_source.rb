@@ -41,7 +41,7 @@ class RedditSource < Source
         title: item['data']['title'],
         url: item['data']['url'],
         via: "https://www.reddit.com#{item['data']['permalink']}",
-        image: image,
+        image: image.gsub('&amp;', '&'),
         counts: Counts.new(
           score: item['data']['score'],
           comments: item['data']['num_comments']

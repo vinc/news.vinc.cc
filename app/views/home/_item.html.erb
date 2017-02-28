@@ -20,7 +20,7 @@
 
     <% if item.image %>
       <p class="card-text text-center mt-3">
-        <img class="img-fluid" src="<%= item.image %>" alt="image">
+        <%= image_tag item.image, class: 'img-fluid' %>
       </p>
     <% end %>
 
