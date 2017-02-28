@@ -23,5 +23,9 @@ module News
     # -- all .rb files in that directory are automatically loaded.
 
     config.cache_store = :redis_store
+
+    config.middleware.delete ActionDispatch::Cookies
+    config.middleware.delete ActionDispatch::Session::CookieStore
+    config.middleware.delete ActionDispatch::Flash
   end
 end
