@@ -1,40 +1,7 @@
-<% content_for(:query, @query) %>
-<% content_for(:results, @results) %>
+<header class="mb-5">
+  <h1 class="display-3 text-center mb-3">Search the news</h1>
+</header>
 
-<% if @results %>
-  <% @results.each do |item| %>
-    <%= render 'item', item: item %>
-  <% end %>
-<% else %>
-  <header class="mb-5">
-    <% if @query.blank? %>
-      <h1 class="display-3 text-center mb-3">Search the news</h1>
-    <% else %>
-      <h1 class="display-3 text-center mb-3">No results :(</h1>
-    <% end %>
-  </header>
+<%= render 'search/suggested_queries' %>
 
-  <div class="suggested-queries">
-    <h2 class="mb-3">Try searching:</h2>
-    <ul>
-      <li><a href="/?q=hackernews">hackernews</a></li>
-      <li><a href="/?q=hackernews+sort:top+limit:10">hackernews sort:top limit:10</a> // custom filters</li>
-      <li><a href="/?q=reddit+programming">reddit programming</a> // subreddit</li>
-      <li><a href="/?q=reddit+askscience+science+space+sort:top+limit:10+t:week">reddit askscience science space</a> // multireddit</li>
-      <li><a href="/?q=reddit+news+worldnews+sort:top+limit:10+time:week">reddit news worldnews sort:top limit:10 time:week</a> // reddit filters</li>
-      <li><a href="/?q=twitter+exoplanets">twitter exoplanets</a></li>
-      <li><a href="/?q=twitter+exoplanets+type:recent+limit:100">twitter exoplanets type:recent limit:100</a> // twitter + custom filters</li>
-      <li><a href="/?q=twitter+puppy+filter:images+type:popular+sort:top">twitter puppy filter:images type:popular sort:top</a> // twitter + custom filters</li>
-      <li><a href="/?q=wikipedia+current+events">wikipedia current events</a></li>
-      <li><a href="/?q=wikipedia+current+events+time:week">wikipedia current events time:week</a> // custom filter</li>
-    </ul>
-  </div>
-
-  <% if @query.blank? %>
-    <div class="saved-queries mt-5" style="display:none">
-      <h2 class="mb-3">Saved queries:</h2>
-      <ul>
-      </ul>
-    </div>
-  <% end %>
-<% end %>
+<%= render 'search/saved_queries' %>

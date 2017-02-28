@@ -1,0 +1,18 @@
+<% content_for(:query, @query) %>
+<% content_for(:results, @results) %>
+
+<% if @results %>
+  <% @results.each do |item| %>
+    <%= render 'item', item: item %>
+  <% end %>
+<% else %>
+  <header class="mb-5">
+    <h1 class="display-3 text-center mb-3">No results :(</h1>
+  </header>
+
+  <%= render 'search/suggested_queries' %>
+
+  <% if @query.blank? %>
+    <%= render 'search/saved_queries' %>
+  <% end %>
+<% end %>
