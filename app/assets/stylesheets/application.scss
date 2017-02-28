@@ -26,4 +26,13 @@ body#home > .container {
   max-width: inherit;
   width: 100%;
   padding: 0;
+
+  .home-top,
+  .home-bottom {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .home-top {
+    min-height: 50vh;
+  }
 }
