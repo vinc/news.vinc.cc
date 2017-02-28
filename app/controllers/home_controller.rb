@@ -5,6 +5,8 @@ class HomeController < ApplicationController
     case @query.split.first
     when 'hackernews', 'hn'
       @source = HackernewsSource.new
+    when 'reddit', 'r'
+      @source = RedditSource.new
     end
     @results = @source.search(@query) if @source
   end
