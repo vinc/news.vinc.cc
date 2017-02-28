@@ -27,25 +27,38 @@ $(document).on('turbolinks:load', function() {
 
   var queries = store.get('queries') || [];
   var query = $("input[name=q]").val();
-  var saveButton = $("#save-search");
+  var saveButton = $("#save-query");
 
-  if (query.indexOf(query) === -1) {
+  if (queries.indexOf(query) === -1) {
     saveButton.html("Save");
   } else {
     saveButton.html("Unsave");
   }
 
+  var savedDiv = $('.saved-queries');
+  var suggestedDiv = $('.suggested-queries');
+
+  // Replace suggested queries by saved queries
+  if (savedDiv.length && queries.length) {
+    queries.sort().forEach(function(query) {
+      $('ul', savedDiv).append('<li><a href="/?q=' + query + '">' + query + '</a></li>');
+    });
+    suggestedDiv.hide();
+    savedDiv.show();
+  }
+
+  // Save or unsave a query
   saveButton.click(function() {
     var queries = store.get('queries') || [];
     var i = queries.indexOf(query);
 
     if (i === -1) {
       queries.push(query);
-      $(".alert-success").html("Search successfuly saved").show();
+      $(".alert-success").html("Query successfuly saved").show();
       saveButton.html("Unsave");
     } else {
       queries.splice(i, 1);
-      $(".alert-success").html("Search successfuly unsaved").show();
+      $(".alert-success").html("Query successfuly unsaved").show();
       saveButton.html("Save");
     }
 
