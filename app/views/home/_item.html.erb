@@ -1,0 +1,55 @@
+<hr class="sr-only">
+<article class="card mb-3">
+  <div class="card-header">
+    <a class="text-muted float-right" href="<%= item.via %>">
+      <%= time_tag(item.created_at, time_ago_in_words(item.created_at)) %>
+    </a>
+    <a class="text-muted card-link card-permalink" href="<%= item.via %>"><%= @source.title %></a>
+  </div>
+
+  <div class="card-block">
+    <% if item.title %>
+      <h4 class="card-title"><a href="<%= item.url %>"><%= item.title %></a></h4>
+    <% end %>
+
+    <% if item.html %>
+      <div class="card-text">
+        <%= item.html %>
+      </div>
+    <% end %>
+
+    <% if item.image %>
+      <p class="card-text text-center mt-3">
+        <img class="img-fluid" src="<%= item.image %>" alt="image">
+      </p>
+    <% end %>
+
+    <% if item.counts.score %>
+      <a class="card-link text-muted" href="<%= item.url %>">
+        <span class="numeral"><%= item.counts.score %></span>
+        points
+      </a>
+    <% end %>
+
+    <% if item.counts.comments %>
+      <a class="card-link text-muted" href="<%= item.via %>">
+        <span class="numeral"><%= item.counts.comments %></span>
+        comments
+      </a>
+    <% end %>
+
+    <% if item.counts.retweets %>
+      <a class="card-link text-muted" href="<%= item.via %>">
+        <span class="numeral"><%= item.counts.retweets %></span>
+        retweets
+      </a>
+    <% end %>
+
+    <% if item.counts.favorites %>
+      <a class="card-link text-muted" href="<%= item.via %>">
+        <span class="numeral"><%= item.counts.favorites %></span>
+        favorites
+      </a>
+    <% end %>
+  </div>
+</article>

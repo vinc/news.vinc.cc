@@ -1,0 +1,7 @@
+<% if @results %>
+  <% @results.each do |item| %>
+    <%= render 'item', item: item %>
+  <% end %>
+<% else %>
+  <h1 class="display-3 text-center mb-3">Search the news</h1>
+<% end %>
