@@ -56,3 +56,12 @@ en:
       almost_x_years:
         one:   "1y"
         other: "%{count}y"
+  number:
+    human:
+      decimal_units:
+        format: "%n%u"
+        units:
+          unit: ""
+          thousand: "k"
+          million: "m"
+          billion: "b"

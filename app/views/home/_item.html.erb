@@ -25,31 +25,10 @@
     <% end %>
 
     <% if item.counts %>
-      <% if item.counts.score %>
-        <a class="card-link text-muted" href="<%= item.url %>">
-          <span class="numeral"><%= item.counts.score %></span>
-          points
-        </a>
-      <% end %>
-
-      <% if item.counts.comments %>
+      <% item.counts.each do |k, v| %>
         <a class="card-link text-muted" href="<%= item.via %>">
-          <span class="numeral"><%= item.counts.comments %></span>
-          comments
-        </a>
-      <% end %>
-
-      <% if item.counts.retweets %>
-        <a class="card-link text-muted" href="<%= item.via %>">
-          <span class="numeral"><%= item.counts.retweets %></span>
-          retweets
-        </a>
-      <% end %>
-
-      <% if item.counts.favorites %>
-        <a class="card-link text-muted" href="<%= item.via %>">
-          <span class="numeral"><%= item.counts.favorites %></span>
-          favorites
+          <%= number_to_human(v) %>
+          <%= k.pluralize(v) %>
         </a>
       <% end %>
     <% end %>

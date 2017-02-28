@@ -27,7 +27,7 @@ class HackernewsSource < Source
         url: url,
         via: via,
         counts: Counts.new(
-          score: item['points'],
+          points: item['points'],
           comments: item['comments_count']
         )
       )

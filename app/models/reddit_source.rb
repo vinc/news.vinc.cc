@@ -43,7 +43,7 @@ class RedditSource < Source
         via: "https://www.reddit.com#{item['data']['permalink']}",
         image: image.gsub('&amp;', '&'),
         counts: Counts.new(
-          score: item['data']['score'],
+          points: item['data']['score'],
           comments: item['data']['num_comments']
         )
       )
