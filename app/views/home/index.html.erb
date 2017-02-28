@@ -1,9 +1,24 @@
 <% content_for(:page, 'home') %>
 
-<header class="mb-5">
-  <h1 class="display-3 text-center mb-3">Search the news</h1>
-</header>
+<div class="d-flex flex-column justify-content-center align-items-center bg-primary" style="padding:15px;min-height:50vh">
+  <div>
+    <header class="mb-sm-5">
+      <h1 class="display-3 text-center text-white mb-3">Search the news</h1>
+    </header>
 
-<%= render 'search/suggested_queries' %>
+    <form method="get" action="/search">
+      <input name="q" value="<%= content_for(:query) %>" class="form-control form-control-lg" type="search" placeholder="Search">
+    </form>
+  </div>
+</div>
 
-<%= render 'search/saved_queries' %>
+<div class="d-flex flex-column justify-content-center align-items-center mt-3" style="padding:15px">
+  <div class="alert alert-success" role="alert" style="<%= alert ? '' : 'display:none' %>">
+    <%= alert %>
+  </div>
+
+  <%= render 'search/suggested_queries' %>
+
+  <%= render 'search/saved_queries' %>
+
+</div>

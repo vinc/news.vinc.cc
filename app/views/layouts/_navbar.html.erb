@@ -1,0 +1,16 @@
+<nav class="navbar navbar-toggleable-xl navbar-inverse bg-primary mb-3">
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <a class="navbar-brand" href="/">News</a>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <form method="get" action="/search" style="width:100%">
+      <input name="q" value="<%= content_for(:query) %>" class="form-control" type="search" placeholder="Search">
+    </form>
+    <% if content_for(:results).present? %>
+      <button id="save-query" type="button" role="button" class="btn btn-outline-secondary ml-2">Save</button>
+    <% end %>
+  </div>
+</nav>

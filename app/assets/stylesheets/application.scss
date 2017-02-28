@@ -17,3 +17,13 @@
 $brand-primary: #0A7;
 
 @import "bootstrap";
+
+body > .container {
+  max-width: 44em;
+}
+
+body#home > .container {
+  max-width: inherit;
+  width: 100%;
+  padding: 0;
+}
