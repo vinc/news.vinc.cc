@@ -5,7 +5,9 @@
     <%= render 'item', item: item %>
   <% end %>
 <% else %>
-  <h1 class="display-3 text-center mb-3">Search the news</h1>
+  <header class="mb-5">
+    <h1 class="display-3 text-center mb-3">Search the news</h1>
+  </header>
 <% end %>
 
 <% if @query.blank? %>
