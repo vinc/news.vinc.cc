@@ -1,5 +1,7 @@
 class HomeController < ApplicationController
   def index
+    expires_in 5.minutes, public: true
+
     @query = search_params[:q] || ''
 
     case @query.split.first
