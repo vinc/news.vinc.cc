@@ -7,6 +7,8 @@ class HomeController < ApplicationController
       @source = HackernewsSource.new
     when 'reddit', 'r'
       @source = RedditSource.new
+    when 'wikipedia', 'w'
+      @source = WikipediaSource.new
     end
     @results = @source.search(@query) if @source
   end
