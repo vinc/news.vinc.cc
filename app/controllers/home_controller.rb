@@ -7,6 +7,8 @@ class HomeController < ApplicationController
       @source = HackernewsSource.new
     when 'reddit', 'r'
       @source = RedditSource.new
+    when 'twitter', 't'
+      @source = TwitterSource.new
     when 'wikipedia', 'w'
       @source = WikipediaSource.new
     end
