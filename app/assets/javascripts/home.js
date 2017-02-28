@@ -1,4 +1,5 @@
 $(document).on('turbolinks:load', function() {
+  // Hide all read items on load
   $('.card').each(function() {
     var card = $(this);
     var permalink = $('.card-permalink', card).attr('href');
@@ -8,6 +9,7 @@ $(document).on('turbolinks:load', function() {
     }
   });
 
+  // Mark an item as read or unread
   $('.card > .card-header').click(function(e) {
     if (e.target.nodeName == 'DIV') {
       var card = $(this).parent();
@@ -21,5 +23,32 @@ $(document).on('turbolinks:load', function() {
         card.addClass('card-read');
       }
     }
+  });
+
+  var queries = store.get('queries') || [];
+  var query = $("input[name=q]").val();
+  var saveButton = $("#save-search");
+
+  if (query.indexOf(query) === -1) {
+    saveButton.html("Save");
+  } else {
+    saveButton.html("Unsave");
+  }
+
+  saveButton.click(function() {
+    var queries = store.get('queries') || [];
+    var i = queries.indexOf(query);
+
+    if (i === -1) {
+      queries.push(query);
+      $(".alert-success").html("Search successfuly saved").show();
+      saveButton.html("Unsave");
+    } else {
+      queries.splice(i, 1);
+      $(".alert-success").html("Search successfuly unsaved").show();
+      saveButton.html("Save");
+    }
+
+    store.set('queries', queries);
   });
 });

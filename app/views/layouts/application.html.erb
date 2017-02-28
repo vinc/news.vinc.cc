@@ -23,16 +23,16 @@
         <form method="get" action="/" style="width:100%">
           <input name="q" value="<%= content_for(:query) %>" class="form-control" type="search" placeholder="Search">
         </form>
-        <% if content_for(:save_button) %>
-          <button id="save-search" type="button" role="button" class="btn btn-outline-secondary ml-2" style="display:none">Save</button>
+        <% if content_for(:results) %>
+          <button id="save-search" type="button" role="button" class="btn btn-outline-secondary ml-2">Save</button>
         <% end %>
       </div>
     </nav>
 
     <div class="container mt-4 mb-auto" style="max-width:44rem">
-      <% if alert %>
-        <div class="alert alert-danger" role="alert"><%= alert %></div>
-      <% end %>
+      <div class="alert alert-success" role="alert" style="<%= alert ? '' : 'display:none' %>">
+        <%= alert %>
+      </div>
 
       <%= yield %>
     </div>

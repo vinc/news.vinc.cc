@@ -1,4 +1,5 @@
 <% content_for(:query, @query) %>
+<% content_for(:results, @results) %>
 
 <% if @results %>
   <% @results.each do |item| %>
@@ -6,11 +7,13 @@
   <% end %>
 <% else %>
   <header class="mb-5">
-    <h1 class="display-3 text-center mb-3">Search the news</h1>
+    <% if @query.blank? %>
+      <h1 class="display-3 text-center mb-3">Search the news</h1>
+    <% else %>
+      <h1 class="display-3 text-center mb-3">No results :(</h1>
+    <% end %>
   </header>
-<% end %>
 
-<% if @query.blank? %>
   <h2 class="mb-3">Try searching:</h2>
   <ul>
     <li><a href="/?q=hackernews">hackernews</a></li>
