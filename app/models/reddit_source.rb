@@ -31,7 +31,7 @@ class RedditSource < Source
         img['resolutions'].each do |resolution|
           if width < resolution['width']
             width = resolution['width']
-            image = resolution['url']
+            image = resolution['url'].gsub('&amp;', '&')
           end
         end
       end
@@ -41,7 +41,7 @@ class RedditSource < Source
         title: item['data']['title'],
         url: item['data']['url'],
         via: "https://www.reddit.com#{item['data']['permalink']}",
-        image: image.gsub('&amp;', '&'),
+        image: image,
         counts: Counts.new(
           points: item['data']['score'],
           comments: item['data']['num_comments']
