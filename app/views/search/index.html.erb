@@ -2,7 +2,7 @@
 <% content_for(:query, @query) %>
 <% content_for(:results, @results) %>
 
-<% if @results %>
+<% if @results.present? %>
   <% @results.each do |item| %>
     <%= render 'item', item: item %>
   <% end %>
