@@ -6,7 +6,7 @@ class WikipediaItem < Item
     hash['revisions'].each do |revision|
       created_at = Time.parse(revision['timestamp'])
       text = revision['*'].
-        gsub("\n<!-- All news hashs above this line -->|}", '')
+        gsub(/\s*<!-- \w+ news \w+ above this line -->\|}/, '')
       html = WikiParser.new(:data => text).to_html
     end
 
