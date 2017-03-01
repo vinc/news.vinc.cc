@@ -1,7 +1,7 @@
 class HackernewsItem < Item
   def self.from_hash(hash)
-    via = "https://news.ycombinator.com/hash?id=#{hash['id']}"
-    url = hash['url'].start_with?('hash?id=') ? via : hash['url']
+    via = "https://news.ycombinator.com/item?id=#{hash['id']}"
+    url = hash['url'].start_with?('item?id=') ? via : hash['url']
 
     self.new(
       created_at: Time.at(hash['time']),
