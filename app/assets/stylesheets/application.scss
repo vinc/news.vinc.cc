@@ -19,6 +19,7 @@ $brand-primary: #0A7;
 @import "bootstrap";
 
 body > .container {
+  width: 100%;
   max-width: 44em;
 }
 
