@@ -19,18 +19,7 @@ class HackernewsSource < Source
     items = items.take(limit)
 
     items.map do |item|
-      via = "https://news.ycombinator.com/item?id=#{item['id']}"
-      url = item['url'].start_with?('item?id=') ? via : item['url']
-      Item.new(
-        created_at: Time.at(item['time']),
-        title: item['title'],
-        url: url,
-        via: via,
-        counts: Counts.new(
-          points: item['points'],
-          comments: item['comments_count']
-        )
-      )
+      HackernewsItem.from_hash(item)
     end
   end
 end

@@ -25,28 +25,7 @@ class RedditSource < Source
     items = json['data']['children']
 
     items.map do |item|
-      image = nil
-      (item.dig('data', 'preview', 'images') || []).each do |img|
-        width = 0
-        img['resolutions'].each do |resolution|
-          if width < resolution['width']
-            width = resolution['width']
-            image = resolution['url'].gsub('&amp;', '&')
-          end
-        end
-      end
-
-      Item.new(
-        created_at: Time.at(item['data']['created_utc'].to_i),
-        title: item['data']['title'],
-        url: item['data']['url'],
-        via: "https://www.reddit.com#{item['data']['permalink']}",
-        image: image,
-        counts: Counts.new(
-          points: item['data']['score'],
-          comments: item['data']['num_comments']
-        )
-      )
+      RedditItem.from_hash(item)
     end
   rescue RestClient::NotFound
   end

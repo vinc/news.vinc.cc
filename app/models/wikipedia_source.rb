@@ -1,10 +1,4 @@
 class WikipediaSource < Source
-  class WikiParser < WikiCloth::Parser
-    url_for do |page|
-      "https://en.wikipedia.org/wiki/#{page}"
-    end
-  end
-
   def initialize
     @title = 'Wikipedia'
     @url = 'https://en.wikipedia.org/'
@@ -42,24 +36,7 @@ class WikipediaSource < Source
       sort_by { |item| -item['pageid'] }
 
     items.map do |item|
-      created_at = nil
-      text = nil
-      html = nil
-      item['revisions'].each do |revision|
-        created_at = Time.parse(revision['timestamp'])
-        text = revision['*'].
-          gsub("\n<!-- All news items above this line -->|}", '')
-        html = WikiParser.new(:data => text).to_html
-      end
-
-      Item.new(
-        created_at: created_at,
-        title: item['title'],
-        via: item['fullurl'],
-        url: item['fullurl'],
-        text: text,
-        html: html
-      )
+      WikipediaItem.from_hash(item)
     end
   end
 end
