@@ -38,6 +38,7 @@ class WikipediaSource < Source
     json = JSON.parse(res.body)
     items = json['query']['pages'].
       map { |k, v| v }.
+      delete_if { |item| item['pageid'].nil? }.
       sort_by { |item| -item['pageid'] }
 
     items.map do |item|
