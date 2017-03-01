@@ -16,11 +16,11 @@ $(document).on('turbolinks:load', function() {
       var permalink = $('.card-permalink', card).attr('href');
 
       if (card.hasClass('card-read')) {
-        store.remove(permalink);
         card.removeClass('card-read');
+        card.trigger('sync-unread');
       } else {
-        store.set(permalink, +new Date());
         card.addClass('card-read');
+        card.trigger('sync-read');
       }
     }
   });
