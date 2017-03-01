@@ -25,8 +25,16 @@ class WikipediaSource < Source
       "Portal:Current_events/#{time}"
     end
 
-    url = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=info|revisions&inprop=url&rvprop=timestamp|content&titles=#{titles.join('|')}"
-    res = RestClient.get(url)
+    url = 'https://en.wikipedia.org/w/api.php'
+    params = {
+      prop:   'info|revisions',
+      rvprop: 'timestamp|content',
+      format: 'json',
+      action: 'query',
+      inprop: 'url',
+      titles: titles.join('|')
+    }
+    res = RestClient.get(url, params: params)
     json = JSON.parse(res.body)
     items = json['query']['pages'].
       map { |k, v| v }.
