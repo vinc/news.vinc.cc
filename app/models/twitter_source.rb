@@ -1,6 +1,4 @@
 class TwitterSource < Source
-  include Twitter::Autolink
-
   def initialize
     @title = 'Twitter'
     @url = 'https://twitter.com'
@@ -30,32 +28,7 @@ class TwitterSource < Source
     tweets = tweets.sort_by { |tweet| -tweet.created_at.to_i } if sort == :new
 
     tweets.map do |tweet|
-      html = auto_link_with_json(tweet.text, tweet.to_hash[:entities], {
-        :hashtag_url_base        => '/?q=twitter+%23',
-        :username_url_base       => '/?q=twitter+@',
-        :username_include_symbol => true,
-        :suppress_no_follow      => true
-      })
-      html = "<p>#{html}</p>"
-      image = nil
-      tweet.media.each do |media|
-        if media.is_a? Twitter::Media::Photo
-          image = media.media_url_https.to_s
-          break
-        end
-      end
-
-      Item.new(
-        created_at: tweet.created_at.dup,
-        text: tweet.text,
-        html: html,
-        via: tweet.url.to_s,
-        image: image,
-        counts: Counts.new(
-          retweets: tweet.retweet_count,
-          favorites: tweet.favorite_count
-        )
-      )
+      TwitterItem.from_tweet(tweet)
     end
   rescue Twitter::Error::BadRequest
   end
