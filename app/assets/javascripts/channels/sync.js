@@ -1,81 +1,86 @@
-var secureRandomToken = function(size) {
-  var array = new Uint32Array(size / 8);
+(function() {
+  var getOrGenerate = function(k) {
+    var v = store.get(k);
 
-  window.crypto.getRandomValues(array);
+    if (!v) {
+      v = CryptoJS.lib.WordArray.random(128/8).toString();
+      store.set(k, v);
+    }
+    return v;
+  };
 
-  return array.reduce(function(s, n) {
-    return s + n.toString(16);
-  }, '');
-};
+  var pass = getOrGenerate('pass');
+  var salt = getOrGenerate('salt');
+  var secretKey = CryptoJS.PBKDF2(pass, salt, { keySize: 256/32 }).toString();
 
-var id = store.get('id');
+  var config = {
+    channel: 'SyncChannel',
+    id: getOrGenerate('id')
+  };
 
-if (!id) {
-  id = secureRandomToken(32);
-  store.set('id', id);
-}
-
-App.sync = App.cable.subscriptions.create({ channel: 'SyncChannel', id: id }, {
-  connected: function(data) {
-    console.log('sending sync');
-    App.sync.send({
-      action: 'sync'
-    });
-  },
-  received: function(data) {
-    if (data.action === 'sync') {
-      console.log('received sync');
-      store.each(function(key, value) {
-        if (typeof key === 'string' && key.startsWith('http')) {
-          console.log('sending read ' + key);
-          App.sync.send({
-            action: 'read',
-            url: key
-          });
-        }
+  App.sync = App.cable.subscriptions.create(config, {
+    connected: function(data) {
+      App.sync.send({
+        action: 'sync'
       });
-    }
+    },
+    received: function(data) {
+      if (data.action === 'sync') {
+        store.each(function(key, value) {
+          if (typeof key === 'string' && key.startsWith('http')) {
+            var permalink = key;
+            var ciphertext = CryptoJS.AES.encrypt(permalink, secretKey).toString();
 
-    var permalink = data.url;
-    var card = $('.card .card-permalink[href="' + permalink + '"]').parents('.card');
-    if (store.get(permalink)) {
-      if (data.action === 'unread') {
-        console.log('received unread ' + permalink);
-        store.remove(permalink);
-        card.removeClass('card-read');
+            App.sync.send({
+              action: 'read',
+              url: ciphertext
+            });
+          }
+        });
+      } else {
+        var ciphertext = data.url;
+        var bytes = CryptoJS.AES.decrypt(ciphertext, secretKey);
+        var permalink = bytes.toString(CryptoJS.enc.Utf8);
+
+        var card = $('.card .card-permalink[href="' + permalink + '"]').parents('.card');
+        if (store.get(permalink)) {
+          if (data.action === 'unread') {
+            store.remove(permalink);
+            card.removeClass('card-read');
+          }
+        } else {
+          if (data.action === 'read') {
+            store.set(permalink, +new Date());
+            card.addClass('card-read');
+          }
+        }
       }
-    } else {
-      if (data.action === 'read') {
-        console.log('received read ' + permalink);
-        store.set(permalink, +new Date());
-        card.addClass('card-read');
-      }
     }
-  }
-});
-
-$(document).on('turbolinks:load', function() {
-  $('.card').on('sync-read', function() {
-    var permalink = $('.card-permalink', $(this)).attr('href');
-
-    store.set(permalink, +new Date());
-
-    console.log('sending read ' + permalink);
-    App.sync.send({
-      action: 'read',
-      url: permalink
-    });
   });
 
-  $('.card').on('sync-unread', function() {
-    var permalink = $('.card-permalink', $(this)).attr('href');
+  $(document).on('turbolinks:load', function() {
+    $('.card').on('sync-read', function() {
+      var permalink = $('.card-permalink', $(this)).attr('href');
+      var ciphertext = CryptoJS.AES.encrypt(permalink, secretKey).toString();
 
-    store.remove(permalink);
+      store.set(permalink, +new Date());
 
-    console.log('sending unread ' + permalink);
-    App.sync.send({
-      action: 'unread',
-      url: permalink
+      App.sync.send({
+        action: 'read',
+        url: ciphertext
+      });
+    });
+
+    $('.card').on('sync-unread', function() {
+      var permalink = $('.card-permalink', $(this)).attr('href');
+      var ciphertext = CryptoJS.AES.encrypt(permalink, secretKey).toString();
+
+      store.remove(permalink);
+
+      App.sync.send({
+        action: 'unread',
+        url: ciphertext
+      });
     });
   });
-});
+}).call(this);
