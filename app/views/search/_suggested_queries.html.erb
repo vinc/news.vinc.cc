@@ -1,15 +1,15 @@
 <div class="suggested-queries">
   <h2 class="mb-3">Try searching:</h2>
   <ul>
-    <li><%= link_to_search('hackernews') %></li>
-    <li><%= link_to_search('hackernews sort:top limit:10') %> // custom filters</li>
+    <li><%= link_to_search('hackernews') %> // hacker news homepage </li>
+    <li><%= link_to_search('hackernews sort:top limit:10', highlight_filters: true) %> // filters</li>
     <li><%= link_to_search('reddit programming') %> // subreddit</li>
     <li><%= link_to_search('reddit askscience science space') %> // multireddit</li>
-    <li><%= link_to_search('reddit news worldnews sort:top limit:10 time:week') %> // reddit filters</li>
-    <li><%= link_to_search('twitter exoplanets') %></li>
-    <li><%= link_to_search('twitter exoplanets type:recent limit:100') %> // twitter + custom filters</li>
-    <li><%= link_to_search('twitter puppy filter:images type:popular sort:top') %> // twitter + custom filters</li>
-    <li><%= link_to_search('wikipedia current events') %></li>
-    <li><%= link_to_search('wikipedia current events time:week') %> // custom filter</li>
+    <li><%= link_to_search('reddit news worldnews sort:top time:week limit:10', highlight_filters: true) %></li>
+    <li><%= link_to_search('twitter exoplanets') %> // twitter search</li>
+    <li><%= link_to_search('twitter exoplanets type:recent limit:100', highlight_filters: true) %></li>
+    <li><%= link_to_search('twitter puppy filter:images type:popular sort:top', highlight_filters: true) %></li>
+    <li><%= link_to_search('wikipedia current events') %> // wikipedia special news page </li>
+    <li><%= link_to_search('wikipedia current events time:week', highlight_filters: true) %></li>
   </ul>
 </div>
