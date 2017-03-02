@@ -15,7 +15,7 @@ class WikipediaSource < Source
       end
 
     titles = limit.times.map do |i|
-      time = (Time.now - i * 86400).strftime('%Y_%B_%d')
+      time = (Time.now - i * 86400).strftime('%Y_%B_%-d')
       "Portal:Current_events/#{time}"
     end
 
