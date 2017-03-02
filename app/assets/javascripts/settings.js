@@ -1,11 +1,18 @@
 $(document).on('turbolinks:load', function() {
+  var newSyncId = $('.form-sync input[name=sync_id]').val(); // Given by server
   var syncId = store.get('sync_id');
   var passphrase = store.get('passphrase');
 
-  if (syncId) {
+  // syncId should be an hex string with the same size as newSyncId
+  var validate = function(syncId, newSyncId) {
+    return syncId && syncId.match('^[0-9a-h]{' + newSyncId.length + '}$');
+  };
+
+  // Use sync_id from local storage or the new one given by the server
+  if (validate(syncId, newSyncId)) {
     $('.form-sync input[name=sync_id]').val(syncId);
   } else {
-    store.set('sync_id', $('.form-sync input[name=sync_id]').val());
+    store.set('sync_id', newSyncId);
   }
 
   if (passphrase) {
@@ -15,6 +22,10 @@ $(document).on('turbolinks:load', function() {
   var updateSyncId = function() {
     console.debug('updating sync_id');
     syncId = $(this).val();
+    if (!validate(syncId, newSyncId)) {
+      syncId = newSyncId;
+      $(this).val(newSyncId);
+    }
     store.set('sync_id', syncId);
   };
   var updatePassphrase = function() {
