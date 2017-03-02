@@ -32,6 +32,7 @@ $(document).on('turbolinks:load', function() {
     }
     store.set('sync_id', syncId);
   };
+
   var updatePassphrase = function() {
     console.debug('updating passphrase');
     passphrase = inputPassphrase.val();

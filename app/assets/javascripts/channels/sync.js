@@ -11,17 +11,21 @@
 
   App.sync = App.cable.subscriptions.create(config, {
     connected: function(data) {
+      console.debug('sending sync');
       App.sync.send({
         action: 'sync'
       });
     },
     received: function(data) {
+      console.debug('received ' + data.action);
+
       if (data.action === 'sync') {
         store.each(function(key, value) {
           if (typeof key === 'string' && key.startsWith('http')) {
             var permalink = key;
             var ciphertext = CryptoJS.AES.encrypt(permalink, passphrase).toString();
 
+            console.debug('sending read');
             App.sync.send({
               action: 'read',
               url: ciphertext
@@ -31,11 +35,14 @@
       } else {
         var ciphertext = data.url;
         var bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);
-        var permalink = bytes.toString(CryptoJS.enc.Utf8);
-
+        var permalink;
+        try {
+          permalink = bytes.toString(CryptoJS.enc.Utf8);
+        } catch(e) {
+          return console.error('Error decrypting permalink');
+        }
         if (!permalink.startsWith('http')) {
-          console.error('Error decrypting permalink');
-          return;
+          return console.error('Error decrypting permalink');
         }
 
         var card = $('.card .card-permalink[href="' + permalink + '"]').parents('.card');
@@ -61,6 +68,7 @@
 
       store.set(permalink, +new Date());
 
+      console.debug('sending read');
       App.sync.send({
         action: 'read',
         url: ciphertext
@@ -73,6 +81,7 @@
 
       store.remove(permalink);
 
+      console.debug('sending unread');
       App.sync.send({
         action: 'unread',
         url: ciphertext
