@@ -33,6 +33,11 @@
         var bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);
         var permalink = bytes.toString(CryptoJS.enc.Utf8);
 
+        if (!permalink.startsWith('http')) {
+          console.error('Error decrypting permalink');
+          return;
+        }
+
         var card = $('.card .card-permalink[href="' + permalink + '"]').parents('.card');
         if (store.get(permalink)) {
           if (data.action === 'unread') {
