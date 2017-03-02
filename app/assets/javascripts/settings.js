@@ -47,9 +47,6 @@ $(document).on('turbolinks:load', function() {
     updateSyncId();
     updatePassphrase();
 
-    console.debug('sending sync');
-    App.sync.send({
-      action: 'sync'
-    });
+    location.reload();
   });
 });
