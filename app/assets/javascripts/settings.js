@@ -43,7 +43,13 @@ $(document).on('turbolinks:load', function() {
   inputPassphrase.on('change', updatePassphrase);
   form.on('submit', function(e) {
     e.preventDefault();
+
     updateSyncId();
     updatePassphrase();
+
+    console.debug('sending sync');
+    App.sync.send({
+      action: 'sync'
+    });
   });
 });
