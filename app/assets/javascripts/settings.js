@@ -1,5 +1,9 @@
 $(document).on('turbolinks:load', function() {
-  var newSyncId = $('.form-sync input[name=sync_id]').val(); // Given by server
+  var form = $('.form-sync');
+  var inputSyncId = $('input[name=sync_id]', form);
+  var inputPassphrase = $('input[name=passphrase]', form);
+
+  var newSyncId = inputSyncId.val(); // Given by server
   var syncId = store.get('sync_id');
   var passphrase = store.get('passphrase');
 
@@ -10,35 +14,35 @@ $(document).on('turbolinks:load', function() {
 
   // Use sync_id from local storage or the new one given by the server
   if (validate(syncId, newSyncId)) {
-    $('.form-sync input[name=sync_id]').val(syncId);
+    inputSyncId.val(syncId);
   } else {
     store.set('sync_id', newSyncId);
   }
 
   if (passphrase) {
-    $('.form-sync input[name=passphrase]').val(passphrase);
+    inputPassphrase.val(passphrase);
   }
   
   var updateSyncId = function() {
     console.debug('updating sync_id');
-    syncId = $(this).val();
+    syncId = inputSyncId.val();
     if (!validate(syncId, newSyncId)) {
       syncId = newSyncId;
-      $(this).val(newSyncId);
+      inputSyncId.val(newSyncId);
     }
     store.set('sync_id', syncId);
   };
   var updatePassphrase = function() {
     console.debug('updating passphrase');
-    passphrase = $(this).val();
+    passphrase = inputPassphrase.val();
     store.set('passphrase', passphrase);
   };
 
-  $('.form-sync input[name=sync_id]').on('change', updateSyncId);
-  $('.form-sync input[name=passphrase]').on('change', updatePassphrase);
-  $('.form-sync').on('submit', function(e) {
+  inputSyncId.on('change', updateSyncId);
+  inputPassphrase.on('change', updatePassphrase);
+  form.on('submit', function(e) {
+    e.preventDefault();
     updateSyncId();
     updatePassphrase();
-    e.preventDefault();
   });
 });
