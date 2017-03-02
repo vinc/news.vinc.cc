@@ -1,22 +1,13 @@
 (function() {
-  var getOrGenerate = function(k) {
-    var v = store.get(k);
-
-    if (!v) {
-      v = CryptoJS.lib.WordArray.random(128/8).toString();
-      store.set(k, v);
-    }
-    return v;
-  };
-
-  var pass = getOrGenerate('pass');
-  var salt = getOrGenerate('salt');
-  var secretKey = CryptoJS.PBKDF2(pass, salt, { keySize: 256/32 }).toString();
-
+  var passphrase = store.get('passphrase');
   var config = {
     channel: 'SyncChannel',
-    id: getOrGenerate('id')
+    sync_id: store.get('sync_id')
   };
+
+  if (!passphrase || !config.sync_id) {
+    return;
+  }
 
   App.sync = App.cable.subscriptions.create(config, {
     connected: function(data) {
@@ -29,7 +20,7 @@
         store.each(function(key, value) {
           if (typeof key === 'string' && key.startsWith('http')) {
             var permalink = key;
-            var ciphertext = CryptoJS.AES.encrypt(permalink, secretKey).toString();
+            var ciphertext = CryptoJS.AES.encrypt(permalink, passphrase).toString();
 
             App.sync.send({
               action: 'read',
@@ -39,7 +30,7 @@
         });
       } else {
         var ciphertext = data.url;
-        var bytes = CryptoJS.AES.decrypt(ciphertext, secretKey);
+        var bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);
         var permalink = bytes.toString(CryptoJS.enc.Utf8);
 
         var card = $('.card .card-permalink[href="' + permalink + '"]').parents('.card');
@@ -61,7 +52,7 @@
   $(document).on('turbolinks:load', function() {
     $('.card').on('sync-read', function() {
       var permalink = $('.card-permalink', $(this)).attr('href');
-      var ciphertext = CryptoJS.AES.encrypt(permalink, secretKey).toString();
+      var ciphertext = CryptoJS.AES.encrypt(permalink, passphrase).toString();
 
       store.set(permalink, +new Date());
 
@@ -73,7 +64,7 @@
 
     $('.card').on('sync-unread', function() {
       var permalink = $('.card-permalink', $(this)).attr('href');
-      var ciphertext = CryptoJS.AES.encrypt(permalink, secretKey).toString();
+      var ciphertext = CryptoJS.AES.encrypt(permalink, passphrase).toString();
 
       store.remove(permalink);
 
