@@ -17,7 +17,7 @@ $(document).on('turbolinks:load', function() {
   var updateAuthSecret = function() {
     console.debug('updating auth_secret');
     authSecret = $('[name=auth_secret]', form).val();
-    store.set('auth_id', authSecret);
+    store.set('auth_secret', authSecret);
   };
   var updatePassphrase = function() {
     console.debug('updating passphrase');

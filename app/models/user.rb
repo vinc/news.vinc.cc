@@ -5,6 +5,12 @@ class User
   field :auth_id,     default: -> { self.generate_auth_id }
   field :auth_secret, default: -> { self.generate_auth_secret }
 
+  embeds_many :permalinks
+
+  def to_param
+    self.auth_id
+  end
+
   def generate_auth_id
     self.auth_id = SecureRandom.uuid
   end
