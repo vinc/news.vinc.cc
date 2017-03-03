@@ -11,7 +11,6 @@
 
   App.sync = App.cable.subscriptions.create(config, {
     received: function(data) {
-      console.debug(data);
       console.debug('received ' + data.action);
 
       var ciphertext = data.encrypted_permalink;
@@ -34,16 +33,26 @@
         }
       } else {
         if (data.action === 'read') {
-          store.set(permalink, +new Date());
+          store.set(permalink, data.id);
           card.addClass('card-read');
         }
       }
     }
   });
 
-  var syncPermalink = function(ciphertext, action) {
-    var type = 'PUT';
-    var path = '/user/' + action + '.json';
+  var syncPermalink = function(action, data) {
+    var type, path, dataType;
+    switch (action) {
+    case 'read':
+      type = 'POST';
+      path = '/user/permalinks.json';
+      break;
+    case 'unread':
+      type = 'DELETE';
+      path = '/user/permalinks/' + data.id + '.json';
+      break;
+    }
+
     var key = store.get('auth_secret');
     var msg = type + ' ' + path;
     var mac = CryptoJS.HmacSHA256(msg, key);
@@ -55,13 +64,12 @@
         authorization: token
       },
       data: {
-        permalink: {
-          encrypted_permalink: ciphertext
-        }
+        permalink: data
       }
     };
+
     console.debug('sending ' + action);
-    $.ajax(path, settings);
+    return $.ajax(path, settings);
   };
 
   $(document).on('turbolinks:load', function() {
@@ -69,16 +77,18 @@
       var permalink = $('.card-permalink', $(this)).attr('href');
       var ciphertext = CryptoJS.AES.encrypt(permalink, passphrase).toString();
 
-      store.set(permalink, +new Date());
-      syncPermalink(ciphertext, 'read');
+      syncPermalink('read', { encrypted_permalink: ciphertext }).done(function(data) {
+        store.set(permalink, data.id);
+      });
     });
 
     $('.card').on('sync-unread', function() {
       var permalink = $('.card-permalink', $(this)).attr('href');
       var ciphertext = CryptoJS.AES.encrypt(permalink, passphrase).toString();
 
-      store.remove(permalink);
-      syncPermalink(ciphertext, 'unread');
+      syncPermalink('unread', { id: store.get(permalink) }).always(function() {
+        store.remove(permalink);
+      });
     });
   });
 }).call(this);

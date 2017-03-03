@@ -10,13 +10,15 @@ class PermalinksController < ApplicationController
   end
 
   def create
-    @permalink = @current_user.permalinks.create(permalink_params)
+    @permalink = @current_user.permalinks.find_or_create_by(permalink_params)
+    SyncChannel.broadcast_to(@current_user, @permalink.as_document.merge(action: 'read'))
     respond_to do |format|
       format.json { render :show, status: :created, location: user_permalinks_url(@permalink, format: :json) }
     end
   end
 
   def destroy
+    SyncChannel.broadcast_to(@current_user, @permalink.as_document.merge(action: 'unread'))
     @permalink.destroy
     respond_to :json
   end
@@ -24,10 +26,10 @@ class PermalinksController < ApplicationController
   private
 
   def permalink_params
-    params.require(:permalink).permit(:encrypted_permalink)
+    params.require(:permalink).permit(:id, :encrypted_permalink)
   end
 
   def set_permalink
-    @current_user.find_by(encrypted_permalink: permalink_params[:encrypted_permalink])
+    @permalink = @current_user.permalinks.find(permalink_params[:id])
   end
 end
