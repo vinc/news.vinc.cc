@@ -13,6 +13,7 @@
     received: function(data) {
       console.debug('received ' + data.action);
 
+      var id = data.id;
       var ciphertext = data.encrypted_permalink;
       var bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);
       var permalink;
@@ -33,7 +34,7 @@
         }
       } else {
         if (data.action === 'read') {
-          store.set(permalink, data.id);
+          store.set(permalink, id);
           card.addClass('card-read');
         }
       }
@@ -43,6 +44,10 @@
   var syncPermalink = function(action, data) {
     var type, path, dataType;
     switch (action) {
+    case 'list':
+      type = 'GET';
+      path = '/user/permalinks.json';
+      break;
     case 'read':
       type = 'POST';
       path = '/user/permalinks.json';
@@ -73,6 +78,29 @@
   };
 
   $(document).on('turbolinks:load', function() {
+    syncPermalink('list').then(function(data) {
+      data.forEach(function(item) {
+        console.debug('received read');
+
+        var id = item.id;
+        var ciphertext = item.encrypted_permalink;
+        var bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);
+        var permalink;
+        try {
+          permalink = bytes.toString(CryptoJS.enc.Utf8);
+        } catch(e) {
+          return console.error('Error decrypting permalink');
+        }
+        if (!permalink.startsWith('http')) {
+          return console.error('Error decrypting permalink');
+        }
+
+        var card = $('.card .card-permalink[href="' + permalink + '"]').parents('.card');
+        store.set(permalink, id);
+        card.addClass('card-read');
+      });
+    });
+
     $('.card').on('sync-read', function() {
       var permalink = $('.card-permalink', $(this)).attr('href');
       var ciphertext = CryptoJS.AES.encrypt(permalink, passphrase).toString();
