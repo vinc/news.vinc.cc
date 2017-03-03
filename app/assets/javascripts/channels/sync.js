@@ -2,10 +2,10 @@
   var passphrase = store.get('passphrase');
   var config = {
     channel: 'SyncChannel',
-    sync_id: store.get('sync_id')
+    auth_id: store.get('auth_id')
   };
 
-  if (!passphrase || !config.sync_id) {
+  if (!passphrase || !config.auth_id) {
     return;
   }
 

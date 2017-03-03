@@ -1,52 +1,51 @@
 $(document).on('turbolinks:load', function() {
   var form = $('.form-sync');
-  var inputSyncId = $('input[name=sync_id]', form);
-  var inputPassphrase = $('input[name=passphrase]', form);
 
-  var newSyncId = inputSyncId.val(); // Given by server
-  var syncId = store.get('sync_id');
+  var authId = store.get('auth_id');
+  var authSecret = store.get('auth_secret');
   var passphrase = store.get('passphrase');
 
-  // syncId should be an hex string with the same size as newSyncId
-  var validate = function(syncId, newSyncId) {
-    return syncId && syncId.match('^[0-9a-h]{' + newSyncId.length + '}$');
-  };
-
-  // Use sync_id from local storage or the new one given by the server
-  if (validate(syncId, newSyncId)) {
-    inputSyncId.val(syncId);
-  } else {
-    store.set('sync_id', newSyncId);
-  }
-
-  if (passphrase) {
-    inputPassphrase.val(passphrase);
-  }
+  $('[name=auth_id]', form).val(authId);
+  $('[name=auth_secret]', form).val(authSecret);
+  $('[name=passphrase]', form).val(passphrase);
   
-  var updateSyncId = function() {
-    console.debug('updating sync_id');
-    syncId = inputSyncId.val();
-    if (!validate(syncId, newSyncId)) {
-      syncId = newSyncId;
-      inputSyncId.val(newSyncId);
-    }
-    store.set('sync_id', syncId);
+  var updateAuthId = function() {
+    console.debug('updating auth_id');
+    authId = $('[name=auth_id]', form).val();
+    store.set('auth_id', authId);
   };
-
+  var updateAuthSecret = function() {
+    console.debug('updating auth_secret');
+    authSecret = $('[name=auth_secret]', form).val();
+    store.set('auth_id', authSecret);
+  };
   var updatePassphrase = function() {
     console.debug('updating passphrase');
-    passphrase = inputPassphrase.val();
+    passphrase = $('[name=passphrase]', form).val();
     store.set('passphrase', passphrase);
   };
 
-  inputSyncId.on('change', updateSyncId);
-  inputPassphrase.on('change', updatePassphrase);
+  $('[name=auth_id]', form).on('change', updateAuthId);
+  $('[name=auth_secret]', form).on('change', updateAuthSecret);
+  $('[name=passphrase]', form).on('change', updatePassphrase);
+
   form.on('submit', function(e) {
     e.preventDefault();
 
-    updateSyncId();
+    updateAuthId();
+    updateAuthSecret();
     updatePassphrase();
 
     location.reload();
+  });
+
+  $('button[name=create-account]', form).click(function() {
+    $.ajax('/user.json', { type: 'POST' }).then(function(data) {
+      store.set('auth_id', data.auth_id);
+      store.set('auth_secret', data.auth_secret);
+
+      $('input[name=auth_id]').val(data.auth_id);
+      $('input[name=auth_secret]').val(data.auth_secret);
+    });
   });
 });

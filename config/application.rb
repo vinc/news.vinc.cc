@@ -27,5 +27,9 @@ module News
     config.middleware.delete ActionDispatch::Cookies
     config.middleware.delete ActionDispatch::Session::CookieStore
     config.middleware.delete ActionDispatch::Flash
+
+    config.generators do |g|
+      g.orm :mongoid
+    end
   end
 end
