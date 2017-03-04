@@ -29,7 +29,8 @@ $(document).on('turbolinks:load', function() {
     var card = $(this);
     var permalink = card.data('url');
 
-    if (store.get('permalink:' + permalink)) {
+    // NOTE: value can be an id if synced to server, or an empty string
+    if (store.get('permalink:' + permalink) !== null) {
       card.addClass('card-read');
     }
   });
@@ -40,10 +41,10 @@ $(document).on('turbolinks:load', function() {
     var permalink = card.data('url');
 
     if (card.hasClass('card-read')) {
-      card.removeClass('card-read');
+      $(document).trigger('unread', permalink);
       $(document).trigger('sync', ['unread', permalink]);
     } else {
-      card.addClass('card-read');
+      $(document).trigger('read', permalink);
       $(document).trigger('sync', ['read', permalink]);
     }
   });
@@ -51,8 +52,8 @@ $(document).on('turbolinks:load', function() {
   var query = $("input[name=q]").val();
   var saveButton = $("#save-query");
 
-
-  if (store.get('query:' + query)) {
+  // NOTE: value can be an id if synced to server, or an empty string
+  if (store.get('query:' + query) !== null) {
     saveButton.html("Unsave");
   } else {
     saveButton.html("Save");
@@ -62,10 +63,12 @@ $(document).on('turbolinks:load', function() {
 
   // Save or unsave a query
   saveButton.click(function() {
-    var key = 'query:' + query;
-    if (store.get(key)) {
+    // NOTE: value can be an id if synced to server, or an empty string
+    if (store.get('query:' + query) !== null) {
+      $(document).trigger('unsave', query);
       $(document).trigger('sync', ['unsave', query]);
     } else {
+      $(document).trigger('save', query);
       $(document).trigger('sync', ['save', query]);
     }
   });
@@ -98,13 +101,13 @@ $(document).on('unsave', function(event, query) {
 });
 
 $(document).on('read', function(event, permalink) {
-  var card = $('.card .card-permalink[href="' + permalink + '"]').parents('.card');
+  var card = $('.card[data-url="' + permalink + '"]');
 
   card.addClass('card-read');
 });
 
 $(document).on('unread', function(event, permalink) {
-  var card = $('.card .card-permalink[href="' + permalink + '"]').parents('.card');
+  var card = $('.card[data-url="' + permalink + '"]');
 
   card.removeClass('card-read');
 });

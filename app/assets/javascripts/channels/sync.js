@@ -7,23 +7,19 @@
     }
   };
 
-  var passphrase = store.get('passphrase');
-
   var config = {
     channel: 'SyncChannel',
     auth_id: store.get('auth_id')
   };
 
-  if (!passphrase || !config.auth_id) {
-    return;
+  if (config.auth_id) {
+    App.sync = App.cable.subscriptions.create(config, {
+      received: function(data) {
+        console.debug('received ' + data.action);
+        syncStore(data);
+      }
+    });
   }
-
-  App.sync = App.cable.subscriptions.create(config, {
-    received: function(data) {
-      console.debug('received ' + data.action);
-      syncStore(data);
-    }
-  });
 
   var getModel = function(action) {
     switch (action) {
@@ -45,6 +41,7 @@
 
     var id = data.id;
     var ciphertext = data['encrypted_' + model];
+    var passphrase = store.get('passphrase');
     var bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);
     var plaintext;
     try {
@@ -119,7 +116,7 @@
     return $.ajax(path, settings);
   };
 
-  //$(document).on('turbolinks:load', function() {
+  if (store.get('passphrase') && store.get('auth_id')) {
     request('list_permalinks').then(function(data) {
       console.debug('received permalinks list');
       (data || []).forEach(function(item) {
@@ -139,7 +136,7 @@
         syncStore(item);
       });
     });
-  //});
+  }
 
   $(document).on('sync', function(event, action, value) {
     if (!action || !value) {
@@ -156,19 +153,22 @@
     case 'save':
       store.set(plaintext, '');
 
-      var params = {};
-      var ciphertext = CryptoJS.AES.encrypt(plaintext, passphrase).toString();
+      if (store.get('passphrase') && store.get('auth_id')) {
+        var params = {};
+        var passphrase = store.get('passphrase');
+        var ciphertext = CryptoJS.AES.encrypt(plaintext, passphrase).toString();
 
-      params['encrypted_' + model] = ciphertext;
-      request(action, params).done(function(data) {
-        store.set(plaintext, data.id);
-      });
+        params['encrypted_' + model] = ciphertext;
+        request(action, params).done(function(data) {
+          store.set(plaintext, data.id);
+        });
+      }
       break;
     case 'unread':
     case 'unsave':
       var id = store.remove(plaintext);
 
-      if (id) {
+      if (id && store.get('auth_id')) {
         request(action, { id: id });
       }
       break;
