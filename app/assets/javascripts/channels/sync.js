@@ -53,9 +53,6 @@
       return console.error('Error decrypting ' + model);
     }
 
-    var value = plaintext.slice(start.length);
-    $(document).trigger(data.action, value);
-
     switch (data.action) {
     case 'read':
     case 'save':
@@ -66,6 +63,9 @@
       store.remove(plaintext);
       break;
     }
+
+    var value = plaintext.slice(start.length);
+    $(document).trigger(data.action, value);
   };
 
   var request = function(action, data) {
@@ -123,7 +123,6 @@
     settings.data[singular(model)] = data;
 
     console.debug('sending ' + action);
-    console.debug(settings);
     return $.ajax(path, settings);
   };
 

@@ -1,3 +1,28 @@
+var updateQueriesList = function() {
+  if ($('body#home').length) {
+    var savedDiv = $('.saved-queries');
+    var suggestedDiv = $('.suggested-queries');
+
+    var start = 'query:';
+    var queries = store.keys().
+      filter(function(key) { return key.startsWith(start); }).
+      map(function(key) { return key.slice(start.length); }) || [];
+
+    // Replace suggested queries by saved queries on the home page
+    if (savedDiv.length && queries.length) {
+      $('ul', savedDiv).html(''); // NOTE: required by turbolink on history back
+      queries.sort().forEach(function(query) {
+        $('ul', savedDiv).append('<li><a href="/search?q=' + query + '">' + query + '</a></li>');
+      });
+      suggestedDiv.hide();
+      savedDiv.show();
+    } else {
+      suggestedDiv.show();
+      savedDiv.hide();
+    }
+  }
+};
+
 $(document).on('turbolinks:load', function() {
   // Hide all read items on load
   $('.card').each(function() {
@@ -28,11 +53,6 @@ $(document).on('turbolinks:load', function() {
   var query = $("input[name=q]").val();
   var saveButton = $("#save-query");
 
-  var start = 'query:';
-  var queries = store.keys().
-    filter(function(key) { return key.startsWith(start); }).
-    map(function(key) { return key.slice(start.length); }) || [];
-
 
   if (store.get('query:' + query)) {
     saveButton.html("Unsave");
@@ -40,28 +60,14 @@ $(document).on('turbolinks:load', function() {
     saveButton.html("Save");
   }
 
-  var savedDiv = $('.saved-queries');
-  var suggestedDiv = $('.suggested-queries');
-
-  // Replace suggested queries by saved queries on the home page
-  console.debug(queries);
-  if ($('body#home').length && savedDiv.length && queries.length) {
-    $('ul', savedDiv).html(''); // NOTE: required by turbolink on history back
-    queries.sort().forEach(function(query) {
-      $('ul', savedDiv).append('<li><a href="/search?q=' + query + '">' + query + '</a></li>');
-    });
-    suggestedDiv.hide();
-    savedDiv.show();
-  }
+  updateQueriesList();
 
   // Save or unsave a query
   saveButton.click(function() {
     var key = 'query:' + query;
     if (store.get(key)) {
-      console.debug('triggering sync-unsave');
       $(document).trigger('sync-unsave', query);
     } else {
-      console.debug('triggering sync-save');
       $(document).trigger('sync-save', query);
     }
   });
@@ -69,15 +75,27 @@ $(document).on('turbolinks:load', function() {
 
 $(document).on('save', function(event, query) {
   if ($("input[name=q]").val() == query) {
-    $(".alert-success").html("Query successfuly saved").show();
-    $('#save-query').html("Unsave");
+    var nextActionTitle = 'Unsave';
+
+    if ($('#save-query').html() != nextActionTitle) {
+      $(".alert-success").html("Query successfuly saved").show();
+      $('#save-query').html(nextActionTitle);
+    }
+  } else {
+    updateQueriesList();
   }
 });
 
 $(document).on('unsave', function(event, query) {
   if ($("input[name=q]").val() == query) {
-    $(".alert-success").html("Query successfuly unsaved").show();
-    $('#save-query').html("Save");
+    var nextActionTitle = 'Save';
+
+    if ($('#save-query').html() != nextActionTitle) {
+      $(".alert-success").html("Query successfuly unsaved").show();
+      $('#save-query').html(nextActionTitle);
+    }
+  } else {
+    updateQueriesList();
   }
 });
 
