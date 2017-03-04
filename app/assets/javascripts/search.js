@@ -58,15 +58,27 @@ $(document).on('turbolinks:load', function() {
   saveButton.click(function() {
     var key = 'query:' + query;
     if (store.get(key)) {
+      console.debug('triggering sync-unsave');
       $(document).trigger('sync-unsave', query);
-      $(".alert-success").html("Query successfuly unsaved").show();
-      saveButton.html("Save");
     } else {
+      console.debug('triggering sync-save');
       $(document).trigger('sync-save', query);
-      $(".alert-success").html("Query successfuly saved").show();
-      saveButton.html("Unsave");
     }
   });
+});
+
+$(document).on('save', function(event, query) {
+  if ($("input[name=q]").val() == query) {
+    $(".alert-success").html("Query successfuly saved").show();
+    $('#save-query').html("Unsave");
+  }
+});
+
+$(document).on('unsave', function(event, query) {
+  if ($("input[name=q]").val() == query) {
+    $(".alert-success").html("Query successfuly unsaved").show();
+    $('#save-query').html("Save");
+  }
 });
 
 $(document).on('read', function(event, permalink) {

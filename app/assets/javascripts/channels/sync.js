@@ -173,7 +173,7 @@
     var plaintext = 'query:' + query;
     var id = store.remove(plaintext);
 
-    request('save', { id: id });
+    request('unsave', { id: id });
   });
 
   $(document).on('sync-unread', function(event, permalink) {
