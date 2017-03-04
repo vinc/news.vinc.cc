@@ -172,13 +172,17 @@
     var plaintext = 'query:' + query;
     var id = store.remove(plaintext);
 
-    request('unsave', { id: id });
+    if (id) {
+      request('unsave', { id: id });
+    }
   });
 
   $(document).on('sync-unread', function(event, permalink) {
     var plaintext = 'permalink:' + permalink;
     var id = store.remove(plaintext);
 
-    request('unread', { id: id });
+    if (id) {
+      request('unread', { id: id });
+    }
   });
 }).call(this);
