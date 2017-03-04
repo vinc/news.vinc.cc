@@ -39,6 +39,10 @@ $(document).on('turbolinks:load', function() {
     location.reload();
   });
 
+  $('button[name=clear-cache]', form).click(function() {
+    store.clear();
+    location.reload();
+  });
   $('button[name=create-account]', form).click(function() {
     $.ajax('/user.json', { type: 'POST' }).then(function(data) {
       store.set('auth_id', data.auth_id);
