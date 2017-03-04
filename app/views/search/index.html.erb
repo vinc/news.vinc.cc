@@ -3,6 +3,19 @@
 <% content_for(:results, @results) %>
 
 <% if @results.present? %>
+  <div class="row align-items-center mb-2">
+    <div class="col col-auto">
+      <span class="">Showing <%= pluralize(@results.size, "result") %></span>
+    </div>
+    <div class="col text-right">
+      <button id="save-query" type="button" role="button" class="btn btn-outline-primary">Save</button>
+    </div>
+  </div>
+
+  <div class="alert alert-success" role="alert" style="<%= alert ? '' : 'display:none' %>">
+    <%= alert %>
+  </div>
+
   <% @results.each do |item| %>
     <%= render 'item', item: item %>
   <% end %>
