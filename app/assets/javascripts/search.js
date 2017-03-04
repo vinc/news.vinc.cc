@@ -42,10 +42,10 @@ $(document).on('turbolinks:load', function() {
 
       if (card.hasClass('card-read')) {
         card.removeClass('card-read');
-        $(document).trigger('sync-unread', permalink);
+        $(document).trigger('sync', ['unread', permalink]);
       } else {
         card.addClass('card-read');
-        $(document).trigger('sync-read', permalink);
+        $(document).trigger('sync', ['read', permalink]);
       }
     }
   });
@@ -66,9 +66,9 @@ $(document).on('turbolinks:load', function() {
   saveButton.click(function() {
     var key = 'query:' + query;
     if (store.get(key)) {
-      $(document).trigger('sync-unsave', query);
+      $(document).trigger('sync', ['unsave', query]);
     } else {
-      $(document).trigger('sync-save', query);
+      $(document).trigger('sync', ['save', query]);
     }
   });
 });

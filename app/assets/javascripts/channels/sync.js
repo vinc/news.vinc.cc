@@ -1,13 +1,14 @@
 (function() {
-  var singular = function(plural) {
-    if (plural.endsWith('ies')) {
-      return plural.slice(0, -3) + 'y';
+  var pluralize = function(singular) {
+    if (singular.endsWith('y')) {
+      return singular.slice(0, -1) + 'ies';
     } else {
-      return plural.slice(0, -1);
+      return singular + 's';
     }
   };
 
   var passphrase = store.get('passphrase');
+
   var config = {
     channel: 'SyncChannel',
     auth_id: store.get('auth_id')
@@ -19,23 +20,26 @@
 
   App.sync = App.cable.subscriptions.create(config, {
     received: function(data) {
+      console.debug('received ' + data.action);
       syncStore(data);
     }
   });
 
-  var syncStore = function(data) {
-    var model;
-
-    switch (data.action) {
+  var getModel = function(action) {
+    switch (action) {
     case 'read':
     case 'unread':
-      model = 'permalink';
-      break;
+    case 'list_permalinks':
+      return 'permalink';
     case 'save':
     case 'unsave':
-      model = 'query';
-      break;
+    case 'list_queries':
+      return 'query';
     }
+  };
+
+  var syncStore = function(data) {
+    var model = getModel(data.action);
 
     console.debug('sync ' + model + ' ' + data.action + ' with store');
 
@@ -69,41 +73,30 @@
   };
 
   var request = function(action, data) {
-    var type, path, model;
-
+    var type;
     switch (action) {
-    case 'list permalinks':
+    case 'list_queries':
+    case 'list_permalinks':
       type = 'GET';
-      model = 'permalinks';
-      break;
-    case 'read':
-      type = 'POST';
-      model = 'permalinks';
-      break;
-    case 'unread':
-      type = 'DELETE';
-      model = 'permalinks';
-      break;
-    case 'list queries':
-      type = 'GET';
-      model = 'queries';
       break;
     case 'save':
+    case 'read':
       type = 'POST';
-      model = 'queries';
       break;
     case 'unsave':
+    case 'unread':
       type = 'DELETE';
-      model = 'queries';
       break;
     }
 
+    var model = getModel(action);
+    var path;
     switch (type) {
     case 'DELETE':
-      path = '/user/' + model + '/' + data.id + '.json';
+      path = '/user/' + pluralize(model) + '/' + data.id + '.json';
       break;
     default:
-      path = '/user/' + model + '.json';
+      path = '/user/' + pluralize(model) + '.json';
       break;
     }
 
@@ -120,14 +113,14 @@
       data: { }
     };
 
-    settings.data[singular(model)] = data;
+    settings.data[model] = data;
 
-    console.debug('sending ' + action);
+    console.debug(['request', action, model].join(' '));
     return $.ajax(path, settings);
   };
 
   $(document).on('turbolinks:load', function() {
-    request('list permalinks').then(function(data) {
+    request('list_permalinks').then(function(data) {
       console.debug('received permalinks list');
       (data || []).forEach(function(item) {
         console.debug('received read');
@@ -137,7 +130,7 @@
       });
     });
 
-    request('list queries').then(function(data) {
+    request('list_queries').then(function(data) {
       console.debug('received queries list');
       (data || []).forEach(function(item) {
         console.debug('received save');
@@ -148,41 +141,37 @@
     });
   });
 
-  $(document).on('sync-save', function(event, query) {
-    var plaintext = 'query:' + query;
-    var ciphertext = CryptoJS.AES.encrypt(plaintext, passphrase).toString();
-
-    store.set(plaintext, '');
-    request('save', { encrypted_query: ciphertext }).done(function(data) {
-      store.set(plaintext, data.id);
-    });
-  });
-
-  $(document).on('sync-read', function(event, permalink) {
-    var plaintext = 'permalink:' + permalink;
-    var ciphertext = CryptoJS.AES.encrypt(plaintext, passphrase).toString();
-
-    store.set(plaintext, '');
-    request('read', { encrypted_permalink: ciphertext }).done(function(data) {
-      store.set(plaintext, data.id);
-    });
-  });
-
-  $(document).on('sync-unsave', function(event, query) {
-    var plaintext = 'query:' + query;
-    var id = store.remove(plaintext);
-
-    if (id) {
-      request('unsave', { id: id });
+  $(document).on('sync', function(event, action, value) {
+    if (!action || !value) {
+      return console.error('Error: sync called with empty params');
     }
-  });
 
-  $(document).on('sync-unread', function(event, permalink) {
-    var plaintext = 'permalink:' + permalink;
-    var id = store.remove(plaintext);
+    var model = getModel(action);
+    var plaintext = model + ':' + value;
 
-    if (id) {
-      request('unread', { id: id });
+    console.debug(['sync', action, model].join(' '));
+
+    switch (action) {
+    case 'read':
+    case 'save':
+      store.set(plaintext, '');
+
+      var params = {};
+      var ciphertext = CryptoJS.AES.encrypt(plaintext, passphrase).toString();
+
+      params['encrypted_' + model] = ciphertext;
+      request(action, params).done(function(data) {
+        store.set(plaintext, data.id);
+      });
+      break;
+    case 'unread':
+    case 'unsave':
+      var id = store.remove(plaintext);
+
+      if (id) {
+        request(action, { id: id });
+      }
+      break;
     }
   });
 }).call(this);
