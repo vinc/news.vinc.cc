@@ -23,7 +23,13 @@
     <span class="text-muted">Used to encrypt data sent to the server</span>
   </div>
 
-  <%= button_tag 'Clear cache', name: 'clear-cache', type: 'button', class: 'btn btn-secondary float-right ml-2' %>
-  <%= button_tag 'Create account', name: 'create-account', type: 'button', class: 'btn btn-secondary float-right ml-2' %>
-  <%= button_tag 'Save', type: 'submit', class: 'btn btn-primary' %>
+  <div class="row align-items-center">
+    <div class="col-sm">
+      <%= button_tag 'Save', type: 'submit', class: 'btn btn-primary' %>
+    </div>
+    <div class="col-sm col-sm-auto text-sm-right mt-2 mt-sm-0">
+      <%= button_tag 'Create account', name: 'create-account', type: 'button', class: 'btn btn-secondary ml-sm-2' %>
+      <%= button_tag 'Clear cache', name: 'clear-cache', type: 'button', class: 'btn btn-secondary ml-1' %>
+    </div>
+  </div>
 </form>
