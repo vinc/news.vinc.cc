@@ -6,6 +6,7 @@ class User
   field :auth_secret, default: -> { self.generate_auth_secret }
 
   embeds_many :permalinks
+  embeds_many :queries
 
   def to_param
     self.auth_id

@@ -25,20 +25,26 @@ $(document).on('turbolinks:load', function() {
     }
   });
 
-  var queries = store.get('queries') || [];
   var query = $("input[name=q]").val();
   var saveButton = $("#save-query");
 
-  if (queries.indexOf(query) === -1) {
-    saveButton.html("Save");
-  } else {
+  var start = 'query:';
+  var queries = store.keys().
+    filter(function(key) { return key.startsWith(start); }).
+    map(function(key) { return key.slice(start.length); }) || [];
+
+
+  if (store.get('query:' + query)) {
     saveButton.html("Unsave");
+  } else {
+    saveButton.html("Save");
   }
 
   var savedDiv = $('.saved-queries');
   var suggestedDiv = $('.suggested-queries');
 
   // Replace suggested queries by saved queries on the home page
+  console.debug(queries);
   if ($('body#home').length && savedDiv.length && queries.length) {
     $('ul', savedDiv).html(''); // NOTE: required by turbolink on history back
     queries.sort().forEach(function(query) {
@@ -50,19 +56,15 @@ $(document).on('turbolinks:load', function() {
 
   // Save or unsave a query
   saveButton.click(function() {
-    var queries = store.get('queries') || [];
-    var i = queries.indexOf(query);
-
-    if (i === -1) {
-      queries.push(query);
-      $(".alert-success").html("Query successfuly saved").show();
-      saveButton.html("Unsave");
-    } else {
-      queries.splice(i, 1);
+    var key = 'query:' + query;
+    if (store.get(key)) {
+      $(document).trigger('sync-unsave', query);
       $(".alert-success").html("Query successfuly unsaved").show();
       saveButton.html("Save");
+    } else {
+      $(document).trigger('sync-save', query);
+      $(".alert-success").html("Query successfuly saved").show();
+      saveButton.html("Unsave");
     }
-
-    store.set('queries', queries);
   });
 });
