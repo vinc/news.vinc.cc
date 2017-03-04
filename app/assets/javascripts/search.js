@@ -29,7 +29,7 @@ $(document).on('turbolinks:load', function() {
     var card = $(this);
     var permalink = $('.card-permalink', card).attr('href');
 
-    if (store.get(permalink)) {
+    if (store.get('permalink:' + permalink)) {
       card.addClass('card-read');
     }
   });
