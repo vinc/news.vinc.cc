@@ -17,10 +17,10 @@ $(document).on('turbolinks:load', function() {
 
       if (card.hasClass('card-read')) {
         card.removeClass('card-read');
-        card.trigger('sync-unread');
+        $(document).trigger('sync-unread', permalink);
       } else {
         card.addClass('card-read');
-        card.trigger('sync-read');
+        $(document).trigger('sync-read', permalink);
       }
     }
   });
@@ -67,4 +67,16 @@ $(document).on('turbolinks:load', function() {
       saveButton.html("Unsave");
     }
   });
+});
+
+$(document).on('read', function(event, permalink) {
+  var card = $('.card .card-permalink[href="' + permalink + '"]').parents('.card');
+
+  card.addClass('card-read');
+});
+
+$(document).on('unread', function(event, permalink) {
+  var card = $('.card .card-permalink[href="' + permalink + '"]').parents('.card');
+
+  card.removeClass('card-read');
 });

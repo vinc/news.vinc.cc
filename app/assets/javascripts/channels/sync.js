@@ -3,7 +3,7 @@
     if (plural.endsWith('ies')) {
       return plural.slice(0, -3) + 'y';
     } else {
-      return plural.slice(0, -2);
+      return plural.slice(0, -1);
     }
   };
 
@@ -19,37 +19,7 @@
 
   App.sync = App.cable.subscriptions.create(config, {
     received: function(data) {
-      console.debug('received ' + data.action);
-
-      if (data.action === 'read' || data.action === 'unread') {
-        var id = data.id;
-        var ciphertext = data.encrypted_permalink;
-        var bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);
-        var permalink;
-        try {
-          permalink = bytes.toString(CryptoJS.enc.Utf8);
-        } catch(e) {
-          return console.error('Error decrypting permalink');
-        }
-        if (!permalink.startsWith('http')) {
-          return console.error('Error decrypting permalink');
-        }
-
-        var card = $('.card .card-permalink[href="' + permalink + '"]').parents('.card');
-        if (store.get(permalink)) {
-          if (data.action === 'unread') {
-            store.remove(permalink);
-            card.removeClass('card-read');
-          }
-        } else {
-          if (data.action === 'read') {
-            store.set(permalink, id);
-            card.addClass('card-read');
-          }
-        }
-      } else if (data.action === 'save' || data.action === 'unsave') {
-        syncStore(data);
-      }
+      syncStore(data);
     }
   });
 
@@ -67,6 +37,8 @@
       break;
     }
 
+    console.debug('sync ' + model + ' ' + data.action + ' with store');
+
     var id = data.id;
     var ciphertext = data['encrypted_' + model];
     var bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);
@@ -81,7 +53,7 @@
       return console.error('Error decrypting ' + model);
     }
 
-    var value = plaintext.slice(start.length, -1);
+    var value = plaintext.slice(start.length);
     $(document).trigger(data.action, value);
 
     switch (data.action) {
@@ -151,31 +123,18 @@
     settings.data[singular(model)] = data;
 
     console.debug('sending ' + action);
+    console.debug(settings);
     return $.ajax(path, settings);
   };
 
   $(document).on('turbolinks:load', function() {
     request('list permalinks').then(function(data) {
       console.debug('received permalinks list');
-      data.forEach(function(item) {
+      (data || []).forEach(function(item) {
         console.debug('received read');
 
-        var id = item.id;
-        var ciphertext = item.encrypted_permalink;
-        var bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);
-        var permalink;
-        try {
-          permalink = bytes.toString(CryptoJS.enc.Utf8);
-        } catch(e) {
-          return console.error('Error decrypting permalink');
-        }
-        if (!permalink.startsWith('http')) {
-          return console.error('Error decrypting permalink');
-        }
-
-        var card = $('.card .card-permalink[href="' + permalink + '"]').parents('.card');
-        store.set(permalink, id);
-        card.addClass('card-read');
+        item.action = 'read';
+        syncStore(item);
       });
     });
 
@@ -184,56 +143,43 @@
       (data || []).forEach(function(item) {
         console.debug('received save');
 
-        var id = item.id;
-        var ciphertext = item.encrypted_query;
-        var bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);
-        var plaintext;
-        try {
-          plaintext = bytes.toString(CryptoJS.enc.Utf8);
-        } catch(e) {
-          return console.error('Error decrypting query');
-        }
-        var start = 'query:';
-        if (!plaintext.startsWith(start)) {
-          return console.error('Error decrypting query');
-        }
-        store.set(plaintext, id);
+        item.action = 'save';
+        syncStore(item);
       });
     });
+  });
 
-    $(document).on('sync-save', function(event, query) {
-      var plaintext = 'query:' + query;
-      var ciphertext = CryptoJS.AES.encrypt(plaintext, passphrase).toString();
+  $(document).on('sync-save', function(event, query) {
+    var plaintext = 'query:' + query;
+    var ciphertext = CryptoJS.AES.encrypt(plaintext, passphrase).toString();
 
-      store.set(plaintext, '');
-      request('save', { encrypted_query: ciphertext }).done(function(data) {
-        store.set(plaintext, data.id);
-      });
+    store.set(plaintext, '');
+    request('save', { encrypted_query: ciphertext }).done(function(data) {
+      store.set(plaintext, data.id);
     });
+  });
 
-    $(document).on('sync-unsave', function(event, query) {
-      var plaintext = 'query:' + query;
-      var id = store.remove(plaintext);
+  $(document).on('sync-read', function(event, permalink) {
+    var plaintext = 'permalink:' + permalink;
+    var ciphertext = CryptoJS.AES.encrypt(plaintext, passphrase).toString();
 
-      request('save', { id: id });
+    store.set(plaintext, '');
+    request('read', { encrypted_permalink: ciphertext }).done(function(data) {
+      store.set(plaintext, data.id);
     });
+  });
 
-    $('.card').on('sync-read', function() {
-      var permalink = $('.card-permalink', $(this)).attr('href');
-      var ciphertext = CryptoJS.AES.encrypt(permalink, passphrase).toString();
+  $(document).on('sync-unsave', function(event, query) {
+    var plaintext = 'query:' + query;
+    var id = store.remove(plaintext);
 
-      request('read', { encrypted_permalink: ciphertext }).done(function(data) {
-        store.set(permalink, data.id);
-      });
-    });
+    request('save', { id: id });
+  });
 
-    $('.card').on('sync-unread', function() {
-      var permalink = $('.card-permalink', $(this)).attr('href');
-      var ciphertext = CryptoJS.AES.encrypt(permalink, passphrase).toString();
+  $(document).on('sync-unread', function(event, permalink) {
+    var plaintext = 'permalink:' + permalink;
+    var id = store.remove(plaintext);
 
-      request('unread', { id: store.get(permalink) }).always(function() {
-        store.remove(permalink);
-      });
-    });
+    request('unread', { id: id });
   });
 }).call(this);
