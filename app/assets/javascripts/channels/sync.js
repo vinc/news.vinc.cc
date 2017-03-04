@@ -119,7 +119,7 @@
     return $.ajax(path, settings);
   };
 
-  $(document).on('turbolinks:load', function() {
+  //$(document).on('turbolinks:load', function() {
     request('list_permalinks').then(function(data) {
       console.debug('received permalinks list');
       (data || []).forEach(function(item) {
@@ -139,7 +139,7 @@
         syncStore(item);
       });
     });
-  });
+  //});
 
   $(document).on('sync', function(event, action, value) {
     if (!action || !value) {
