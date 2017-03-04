@@ -6,12 +6,12 @@
   <a class="navbar-brand" href="/">News</a>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <div class="navbar-nav" style="width:100%">
       <form method="get" action="/search" style="width:100%">
         <input name="q" value="<%= content_for(:query) %>" class="form-control" type="search" placeholder="Search">
       </form>
 
-      <%= link_to 'Settings', edit_settings_path, class: "nav-item nav-link ml-2 #{content_for(:page) == 'settings' ? 'active' : ''}" %>
+    <div class="navbar-nav" class="">
+        <%= link_to 'Settings', edit_settings_path, class: "nav-item nav-link pb-0 pr-0 ml-2 #{content_for(:page) == 'settings' ? 'active' : ''}" %>
     </div>
   </div>
 </nav>
