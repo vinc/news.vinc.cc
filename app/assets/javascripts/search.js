@@ -27,7 +27,7 @@ $(document).on('turbolinks:load', function() {
   // Hide all read items on load
   $('.card').each(function() {
     var card = $(this);
-    var permalink = $('.card-permalink', card).attr('href');
+    var permalink = card.data('url');
 
     if (store.get('permalink:' + permalink)) {
       card.addClass('card-read');
@@ -36,17 +36,15 @@ $(document).on('turbolinks:load', function() {
 
   // Mark an item as read or unread
   $('.card > .card-header').click(function(e) {
-    if (e.target.nodeName == 'DIV') {
-      var card = $(this).parent();
-      var permalink = $('.card-permalink', card).attr('href');
+    var card = $(this).parent();
+    var permalink = card.data('url');
 
-      if (card.hasClass('card-read')) {
-        card.removeClass('card-read');
-        $(document).trigger('sync', ['unread', permalink]);
-      } else {
-        card.addClass('card-read');
-        $(document).trigger('sync', ['read', permalink]);
-      }
+    if (card.hasClass('card-read')) {
+      card.removeClass('card-read');
+      $(document).trigger('sync', ['unread', permalink]);
+    } else {
+      card.addClass('card-read');
+      $(document).trigger('sync', ['read', permalink]);
     }
   });
 
