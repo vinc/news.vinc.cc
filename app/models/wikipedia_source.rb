@@ -33,7 +33,7 @@ class WikipediaSource < Source
     items = json['query']['pages'].
       map { |k, v| v }.
       delete_if { |item| item['pageid'].nil? }.
-      sort_by { |item| -item['pageid'] }
+      sort_by { |item| -Time.parse(item['fullurl'].split('/').last).to_i }
 
     items.map do |item|
       WikipediaItem.from_hash(item)
