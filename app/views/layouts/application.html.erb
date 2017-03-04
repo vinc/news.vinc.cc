@@ -11,19 +11,21 @@
 
   <body id="<%= content_for(:page) %>" class="d-flex flex-column" style="min-height:100vh">
 
-    <% unless content_for(:page) == 'home' %>
+    <% #unless content_for(:page) == 'home' %>
       <%= render 'layouts/navbar' %>
-    <% end %>
+    <% #end %>
 
     <div class="container mb-auto">
       <%= yield %>
     </div>
 
     <footer class="mt-4">
-      <p class="text-center text-muted">
-        <span>Built with &hearts; by <a href="https://vinc.cc" class="text-muted"><strong>vinc</strong></a>.</span>
-        <span>Code licensed <a href="https://github.com/vinc/news.vinc.cc/blob/master/LICENSE" class="text-muted"><strong>MIT</strong></a>.</span>
-      </p>
+      <div class="container-fluid">
+        <p class="text-center text-muted">
+          <span>Built with &hearts; by <a href="https://vinc.cc" class="text-muted"><strong>vinc</strong></a>.</span>
+          <span>Code licensed <a href="https://github.com/vinc/news.vinc.cc/blob/master/LICENSE" class="text-muted"><strong>MIT</strong></a>.</span>
+        </p>
+      <div>
     </footer>
   </body>
 </html>

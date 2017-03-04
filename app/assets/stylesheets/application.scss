@@ -27,6 +27,9 @@ body#home > .container {
   max-width: inherit;
   width: 100%;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 2;
 
   .home-top,
   .home-bottom {
@@ -34,7 +37,7 @@ body#home > .container {
     padding-right: 15px;
   }
   .home-top {
-    min-height: 50vh;
+    flex-grow: 2;
   }
 }
 
