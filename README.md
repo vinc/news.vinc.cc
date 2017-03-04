@@ -1,3 +1,3 @@
 # README
 
-WIP
+https://news.vinc.cc
