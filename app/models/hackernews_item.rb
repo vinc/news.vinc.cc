@@ -4,6 +4,7 @@ class HackernewsItem < Item
     url = hash['url'].start_with?('item?id=') ? via : hash['url']
 
     self.new(
+      author: hash['user'],
       created_at: Time.at(hash['time']),
       title: hash['title'],
       url: url,

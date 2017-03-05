@@ -19,6 +19,7 @@ class TwitterItem < Item
       end
 
       self.new(
+        author: tweet.user.screen_name,
         created_at: tweet.created_at.dup,
         text: tweet.text,
         html: html,
