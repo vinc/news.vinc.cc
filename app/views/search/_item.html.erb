@@ -24,7 +24,7 @@
 
     <% if item.image %>
       <p class="card-text text-center mt-3">
-        <%= image_tag item.image, class: 'img-fluid' %>
+        <%= image_tag thumb_url(item.image, geometry: '800x800'), alt: 'image', class: 'img-fluid' %>
       </p>
     <% end %>
 
