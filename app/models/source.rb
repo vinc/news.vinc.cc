@@ -22,7 +22,7 @@ class Source
     []
   end
 
-  def to_query
+  def to_s
     self.class.to_s.downcase.sub('source', '')
   end
 
@@ -36,8 +36,7 @@ class Source
   # 'hackernews time:week' will return an instance of HackernewsSource
   # 'hn time:week' will also return an instance of HackernewsSource
   # 'unknown source' will return nil
-  def self.from_query(query)
-    source = query[/\w+/]
+  def self.from_s(source)
     source = ALIASES[source] if ALIASES.include?(source)
     Source.const_get("#{source.capitalize}Source").new
   rescue NameError

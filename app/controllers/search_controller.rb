@@ -4,10 +4,10 @@ class SearchController < ApplicationController
 
     @query = search_params[:q] || ''
 
-    @source = Source.from_query(@query)
+    @source = Source.from_s(@query[/\w+/])
 
     if @source
-      @query[/\w+/] = @source.to_query # Resolve shortcut notation
+      @query[/\w+/] = @source.to_s # Resolve shortcut notation
       @results = @source.search(@query)
     end
   end
