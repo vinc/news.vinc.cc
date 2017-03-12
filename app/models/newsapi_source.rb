@@ -8,8 +8,12 @@ class NewsapiSource < Source
   def request(args, options={})
     limit = (1..50).include?(options[:limit]) ? options[:limit] : 10
 
-    sorts = %i(new hot top)
-    sort = sorts.include?(options[:sort]) ? options[:sort] : :top
+    sorts = {
+      :new => :latest,
+      :hot => :popular,
+      :top => :top
+    }
+    sort = sorts[options[:sort]] || :top
 
     params = {
       source: args[1],
