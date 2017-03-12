@@ -5,9 +5,11 @@
       <div class="col col-auto">
         <%= @source.title %>
       </div>
-      <div class="col text-right">
-        <%= time_tag(item.created_at, time_ago_in_words(item.created_at)) %>
-      </div>
+      <% if item.created_at %>
+        <div class="col text-right">
+          <%= time_tag(item.created_at, time_ago_in_words(item.created_at)) %>
+        </div>
+      <% end %>
     </div>
   </div>
 
