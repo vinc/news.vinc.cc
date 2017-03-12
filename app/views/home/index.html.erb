@@ -6,9 +6,7 @@
       <h1 class="display-3 text-center text-white mb-3">Search the news</h1>
     </header>
 
-    <form method="get" action="/search">
-      <input name="q" value="<%= content_for(:query) %>" class="form-control form-control-lg" type="search" placeholder="Search">
-    </form>
+    <%= render 'search/form' %>
   </div>
 </div>
 
