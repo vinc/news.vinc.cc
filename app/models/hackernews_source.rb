@@ -5,7 +5,9 @@ class HackernewsSource < Source
   end
 
   def request(args, options={})
-    items = args.size > 1 ? request_search(args, options) : request_homepage(options)
+    api = (args.size > 1 || options.include?(:time)) ? :request_search : :request_homepage
+
+    items = send(api, args, options)
 
     items.map do |item|
       HackernewsItem.from_hash(item)
@@ -13,7 +15,7 @@ class HackernewsSource < Source
   end
 
   # https://github.com/cheeaun/node-hnapi/wiki/API-Documentation
-  def request_homepage(options={})
+  def request_homepage(args, options={})
     limit = (1..30).include?(options[:limit]) ? options[:limit] : 30
 
     sorts = %i(new hot top)
