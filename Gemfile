@@ -65,3 +65,8 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-store'
   gem 'rails-assets-crypto-js'
 end
+
+group :test do
+  gem 'rspec-rails', '~> 3.5'
+  gem 'capybara'
+end
