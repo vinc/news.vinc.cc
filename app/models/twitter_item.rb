@@ -4,8 +4,8 @@ class TwitterItem < Item
 
     def from_tweet(tweet)
       html = auto_link_with_json(tweet.text, tweet.to_hash[:entities], {
-        hashtag_url_base:        '/?q=twitter+%23',
-        username_url_base:       '/?q=twitter+@',
+        hashtag_url_base:        '/search?q=twitter+%23',
+        username_url_base:       '/search?q=twitter+@',
         username_include_symbol: true,
         suppress_no_follow:      true
       })
