@@ -12,7 +12,7 @@ var updateQueriesList = function() {
     if (savedDiv.length && queries.length) {
       $('ul', savedDiv).html(''); // NOTE: required by turbolink on history back
       queries.sort().forEach(function(query) {
-        $('ul', savedDiv).append('<li><a href="/search?q=' + query + '">' + query + '</a></li>');
+        $('ul', savedDiv).append('<li><a href="/search?q=' + encodeURIComponent(query) + '">' + query + '</a></li>');
       });
       suggestedDiv.hide();
       savedDiv.show();
