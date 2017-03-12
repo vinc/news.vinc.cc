@@ -9,23 +9,8 @@ class ApplicationController < ActionController::Base
 
   def authenticate_with_hmac
     authenticate_with_http_token do |token, options|
-      client_id, client_mac = token.split(':')
-      return false if client_id.nil? || client_mac.nil?
-
-      user = User.where(auth_id: client_id).first
-      return false if user.nil?
-
-      server_secret = user.auth_secret
-
       message = "#{request.method} #{request.path}"
-
-      server_mac = OpenSSL::HMAC.hexdigest('SHA256', server_secret, message)
-
-      if ActiveSupport::SecurityUtils.secure_compare(server_mac, client_mac)
-        @current_user = user
-      else
-        return false
-      end
+      @current_user = User.find_with_hmac(token, message)
     end
   end
 
