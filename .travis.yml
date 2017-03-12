@@ -1,0 +1,6 @@
+language: ruby
+services:
+  - mongodb
+  - redis
+script:
+  - bundle exec rake spec
