@@ -4,17 +4,12 @@ class SearchController < ApplicationController
 
     @query = search_params[:q] || ''
 
-    case @query.split.first
-    when 'hackernews', 'hn'
-      @source = HackernewsSource.new
-    when 'reddit', 'r'
-      @source = RedditSource.new
-    when 'twitter', 't'
-      @source = TwitterSource.new
-    when 'wikipedia', 'w'
-      @source = WikipediaSource.new
+    @source = Source.from_query(@query)
+
+    if @source
+      @query[/\w+/] = @source.to_query # Resolve shortcut notation
+      @results = @source.search(@query)
     end
-    @results = @source.search(@query) if @source
   end
 
   private
