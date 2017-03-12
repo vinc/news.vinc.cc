@@ -21,6 +21,8 @@ class User
   end
 
   def self.find_with_hmac(token, message)
+    return nil if token.nil? || message.nil?
+
     client_id, client_mac = token.split(':')
     return nil if client_id.nil? || client_mac.nil?
 
