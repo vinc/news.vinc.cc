@@ -4,10 +4,20 @@ class HackernewsSource < Source
     @url = 'https://news.ycombinator.com'
   end
 
-  def request(args, options={})
-    api = (args.size > 1 || options.include?(:time)) ? :request_search : :request_homepage
+  def before_request(args, options)
+    if args.size > 1 || options.include?(:time)
+      @source_title = 'Algolia'
+      @source_url = 'https://hn.algolia.com'
+      @source_api = :request_search
+    else
+      @source_title = 'HNapi'
+      @source_url = 'https://github.com/cheeaun/node-hnapi'
+      @source_api = :request_homepage
+    end
+  end
 
-    items = send(api, args, options)
+  def request(args, options={})
+    items = send(@source_api, args, options)
 
     items.map do |item|
       HackernewsItem.from_hash(item)

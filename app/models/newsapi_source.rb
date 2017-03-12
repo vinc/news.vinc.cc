@@ -2,6 +2,9 @@ class NewsapiSource < Source
   def initialize
     @title = 'News API'
     @url = 'https://newsapi.org/'
+
+    @source_title = @title
+    @source_url = @url
   end
 
   # https://newsapi.org/

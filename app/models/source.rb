@@ -1,5 +1,5 @@
 class Source
-  attr_reader :title, :url
+  attr_reader :title, :url, :source_title, :source_url
 
   def search(query)
     opts = {}
@@ -12,6 +12,8 @@ class Source
       end
       acc
     end
+
+    before_request(args, opts) if self.respond_to?(:before_request)
 
     Rails.cache.fetch(query, expires_in: 5.minutes) do
       request(args, opts)
