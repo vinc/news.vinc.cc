@@ -15,6 +15,7 @@
  */
 
 $brand-primary: #0A7;
+$input-color: #292b2c; // $gray-dark
 
 @import "bootstrap";
 
@@ -59,4 +60,38 @@ body#home > .container {
 
 .turbolinks-progress-bar {
   background-color: lighten($brand-primary, 25%);
+}
+
+span.twitter-typeahead {
+  display: block !important;
+  width: 100%;
+
+  // Fix background color on selection in input and suggestions
+  .tt-input::selection,
+  .tt-cursor {
+    color: inherit !important;
+    background-color: $input-border-focus !important;
+  }
+
+  .tt-hint {
+    color: $input-color-placeholder;
+  }
+
+  .tt-menu {
+    width: 100%;
+    @extend .dropdown-menu;
+  }
+
+  .tt-suggestion {
+    @extend .dropdown-item;
+  }
+
+  .tt-suggestion.tt-cursor {
+     @extend .dropdown-item.active;
+  }
+}
+
+// Harmonize background color of selection in input
+input::selection {
+  background-color: $input-border-focus !important;
 }

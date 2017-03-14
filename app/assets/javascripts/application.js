@@ -16,5 +16,6 @@
 //= require turbolinks
 //= require tether
 //= require bootstrap
+//= require twitter/typeahead
 //= require store
 //= require_tree .

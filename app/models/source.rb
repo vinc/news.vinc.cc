@@ -1,7 +1,13 @@
 class Source
-  attr_reader :title, :url, :source_title, :source_url
+  attr_reader :filters, :title, :url, :source_title, :source_url
+
+  def initialize
+    @filters = {}
+  end
 
   def search(query)
+    before_search(query) if self.respond_to?(:before_search)
+
     opts = {}
     args = query.split.reduce([]) do |acc, word|
       case word
@@ -13,8 +19,6 @@ class Source
       acc
     end
 
-    before_request(args, opts) if self.respond_to?(:before_request)
-
     Rails.cache.fetch(query, expires_in: 5.minutes) do
       request(args, opts)
     end
@@ -22,6 +26,36 @@ class Source
 
   def request(args, opts={})
     []
+  end
+
+  def get_suggestions(query)
+    []
+  end
+
+  def autocomplete(query)
+    before_autocomplete(query) if self.respond_to?(:before_autocomplete)
+
+    suggestions = self.get_suggestions(query)
+
+    words = query.split(' ', -1)
+
+    if words.size > 1
+      current_word = words.pop
+      query = words.join(' ')
+
+      @filters.keys.each do |filter|
+        name = filter.to_s.singularize
+        unless query["#{name}:"]
+          suggestions += @filters[filter].map { |s| "#{name}:#{s}" }
+        end
+      end
+
+      suggestions.delete_if do |suggestion|
+        words.include?(suggestion) || !suggestion.starts_with?(current_word)
+      end
+    end
+
+    suggestions.map { |suggestion| "#{query} #{suggestion}" }
   end
 
   def to_s

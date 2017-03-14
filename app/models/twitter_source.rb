@@ -2,6 +2,11 @@ class TwitterSource < Source
   def initialize
     @title = 'Twitter'
     @url = 'https://twitter.com'
+    @filters = {
+      types: %i(recent popular mixed),
+      sorts: %i(new hot top),
+      limits: 1..100
+    }
   end
 
   # https://dev.twitter.com/rest/public/search
@@ -9,10 +14,10 @@ class TwitterSource < Source
     limit = (1..100).include?(options[:limit]) ? options[:limit] : 15
     options.delete(:limit)
 
-    type = %i(recent popular mixed).include?(options[:type]) ? options[:type] : :mixed
+    type = @filters[:types].include?(options[:type]) ? options[:type] : :mixed
     options.delete(:type)
 
-    sort = %i(new hot top).include?(options[:sort]) ? options[:sort] : :hot
+    sort = @filters[:sort].include?(options[:sort]) ? options[:sort] : :hot
     options.delete(:sort)
 
     # merge the remaining options with the query

@@ -4,15 +4,43 @@ class HackernewsSource < Source
     @url = 'https://news.ycombinator.com'
   end
 
-  def before_request(args, options)
-    if args.size > 1 || options.include?(:time)
-      @source_title = 'Algolia'
-      @source_url = 'https://hn.algolia.com'
-      @source_api = :request_search
+  def initialize_homepage
+    @source_title = 'HNapi'
+    @source_url = 'https://github.com/cheeaun/node-hnapi'
+    @source_api = :request_homepage
+    @filters = {
+      sorts: %i(new hot top),
+      limits: 1..30
+    }
+  end
+
+  def initialize_search
+    @source_title = 'Algolia'
+    @source_url = 'https://hn.algolia.com'
+    @source_api = :request_search
+    @filters = {
+      times: %i(hour day week month year all),
+      limits: 1..100
+    }
+  end
+
+  def before_search(query)
+    f = 'time:'
+    if query.split.keep_if { |w| !w[':'] || w.starts_with?(f) }.count > 1
+      self.initialize_search
     else
-      @source_title = 'HNapi'
-      @source_url = 'https://github.com/cheeaun/node-hnapi'
-      @source_api = :request_homepage
+      self.initialize_homepage
+    end
+  end
+
+  def before_autocomplete(query)
+    words = query.split(' ', -1)
+    w = words.pop
+    f = 'time:'
+    if w.starts_with?(f) || f.starts_with?(w)
+      before_search(query)
+    else
+      before_search(words.join(' '))
     end
   end
 
@@ -26,10 +54,8 @@ class HackernewsSource < Source
 
   # https://github.com/cheeaun/node-hnapi/wiki/API-Documentation
   def request_homepage(args, options={})
-    limit = (1..30).include?(options[:limit]) ? options[:limit] : 30
-
-    sorts = %i(new hot top)
-    sort = sorts.include?(options[:sort]) ? options[:sort] : :hot
+    limit = @filters[:limits].include?(options[:limit]) ? options[:limit] : 30
+    sort = @filters[:sorts].include?(options[:sort]) ? options[:sort] : :hot
 
     url = 'http://node-hnapi.herokuapp.com/news'
     res = RestClient.get(url)
@@ -42,12 +68,9 @@ class HackernewsSource < Source
 
   # https://hn.algolia.com/api
   def request_search(args, options={})
-    limit = (1..100).include?(options[:limit]) ? options[:limit] : 10
+    limit = @filters[:limits].include?(options[:limit]) ? options[:limit] : 10
+    time = @filters[:times].include?(options[:time]) ? options[:time] : :day
 
-    # NOTE: only used by top and controversial sorts
-    times = %i(hour day week month year all)
-    opt = options[:t] || options[:time]
-    time = times.include?(opt) ? opt : :day
     created_after = time == :all ? 0 : (Time.zone.now - 1.send(time)).to_i
 
     params = {

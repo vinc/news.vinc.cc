@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
 
   get 'search', to: 'search#index'
+  get 'search/autocomplete', to: 'search#autocomplete'
 
   root 'home#index'
 end

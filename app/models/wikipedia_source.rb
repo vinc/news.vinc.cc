@@ -2,6 +2,10 @@ class WikipediaSource < Source
   def initialize
     @title = 'Wikipedia'
     @url = 'https://en.wikipedia.org/'
+    @filters = {
+      times: %i(day week),
+      limits: 1..10
+    }
   end
 
   # https://www.mediawiki.org/wiki/API:Query
@@ -38,5 +42,9 @@ class WikipediaSource < Source
     items.map do |item|
       WikipediaItem.from_hash(item)
     end
+  end
+
+  def get_suggestions(query)
+    ['events']
   end
 end

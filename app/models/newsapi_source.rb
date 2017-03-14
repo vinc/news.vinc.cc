@@ -5,11 +5,15 @@ class NewsapiSource < Source
 
     @source_title = @title
     @source_url = @url
+    @filters = {
+      sorts: %i(new hot top),
+      limits: 1..50
+    }
   end
 
   # https://newsapi.org/
   def request(args, options={})
-    limit = (1..50).include?(options[:limit]) ? options[:limit] : 10
+    limit = @filters[:limits].include?(options[:limit]) ? options[:limit] : 10
 
     sorts = {
       :new => :latest,
@@ -32,5 +36,17 @@ class NewsapiSource < Source
       NewsapiItem.from_hash(item)
     end
   rescue RestClient::NotFound
+  end
+
+  def get_suggestions(query)
+    # Only one source per query
+    return [] if query.split(' ', -1).keep_if { |w| !w[':']}.count > 2
+
+    Rails.cache.fetch('newsapi:suggestions', expires_in: 1.day) do
+      url = 'https://newsapi.org/v1/sources'
+      res = RestClient.get(url)
+      json = JSON.parse(res.body)
+      json['sources'].map { |source| source['id'] }
+    end
   end
 end
