@@ -13,7 +13,7 @@ class SearchController < ApplicationController
     set_search(:autocomplete)
 
     if @source.nil?
-      sources = Source.all.map { |s| s.new.to_s }
+      sources = Source.all.map { |s| s.new.to_s }.sort
       @results = sources.keep_if { |s| s.starts_with?(@query) }
 
       if @results.count == 1
