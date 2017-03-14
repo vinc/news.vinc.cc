@@ -77,4 +77,14 @@ class Source
     Source.const_get("#{source.capitalize}Source").new
   rescue NameError
   end
+
+  def self.all
+    if descendants.empty?
+      Dir["#{Rails.root}/app/models/*_source.rb"].each do |file|
+        require_dependency file
+      end
+    end
+
+    descendants
+  end
 end
