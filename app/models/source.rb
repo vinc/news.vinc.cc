@@ -38,21 +38,18 @@ class Source
     suggestions = self.get_suggestions(query)
 
     words = query.split(' ', -1)
+    current_word = words.size > 1 ? words.pop : ''
+    query = words.join(' ')
 
-    if words.size > 1
-      current_word = words.pop
-      query = words.join(' ')
-
-      @filters.keys.each do |filter|
-        name = filter.to_s.singularize
-        unless query["#{name}:"]
-          suggestions += @filters[filter].map { |s| "#{name}:#{s}" }
-        end
+    @filters.keys.each do |filter|
+      name = filter.to_s.singularize
+      unless query["#{name}:"]
+        suggestions += @filters[filter].map { |s| "#{name}:#{s}" }
       end
+    end
 
-      suggestions.delete_if do |suggestion|
-        words.include?(suggestion) || !suggestion.starts_with?(current_word)
-      end
+    suggestions.delete_if do |suggestion|
+      words.include?(suggestion) || !suggestion.starts_with?(current_word)
     end
 
     suggestions.map { |suggestion| "#{query} #{suggestion}" }
