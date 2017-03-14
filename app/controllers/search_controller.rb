@@ -29,7 +29,7 @@ class SearchController < ApplicationController
   private
 
   def set_query
-    @query = search_params[:q] || ''
+    @query = search_params[:q].downcase || ''
   end
 
   def set_search(search_type)
