@@ -11,13 +11,13 @@ class TwitterSource < Source
 
   # https://dev.twitter.com/rest/public/search
   def request(args, options={})
-    limit = (1..100).include?(options[:limit]) ? options[:limit] : 15
+    limit = @filters[:limits].include?(options[:limit]) ? options[:limit] : 15
     options.delete(:limit)
 
     type = @filters[:types].include?(options[:type]) ? options[:type] : :mixed
     options.delete(:type)
 
-    sort = @filters[:sort].include?(options[:sort]) ? options[:sort] : :hot
+    sort = @filters[:sorts].include?(options[:sort]) ? options[:sort] : :hot
     options.delete(:sort)
 
     # merge the remaining options with the query
