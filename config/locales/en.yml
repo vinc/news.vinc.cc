@@ -42,7 +42,7 @@ en:
         one:   "1d"
         other: "%{count}d"
       about_x_months:
-        one:   "1m"
+        one:   "1mo"
         other: "%{count}mo"
       x_months:
         one:   "1mo"
