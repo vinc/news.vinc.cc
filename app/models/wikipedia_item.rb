@@ -5,8 +5,13 @@ class WikipediaItem < Item
     html = nil
     hash['revisions'].each do |revision|
       created_at = Time.parse(revision['timestamp'])
-      text = revision['*'].
-        gsub(/\s*<!-- \w+ news \w+ above this line -->\|}/, '')
+      text = ''
+      is_text = false
+      revision['*'].lines.each do |line|
+        is_text = false if line =~ /news \w+ above this line/
+        text += line if is_text
+        is_text = true if line =~ /news \w+ below this line/
+      end
       html = WikiParser.new(:data => text).to_html
     end
 
