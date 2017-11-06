@@ -5,7 +5,7 @@ atom_feed do |feed|
   @results.each do |item|
     feed.entry(item, { id: item.via, url: item.via }) do |entry|
       entry.title(item.title)
-      entry.content(item.html) if item.html
+      entry.content(item.html, type: 'html') if item.html
       entry.link(item.url, { rel: 'related' }) if item.url
 
       entry.author do |author|
