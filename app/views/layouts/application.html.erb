@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title><%= content_for(:title) || 'News' %></title>
+    <% if controller_name == 'search' && action_name == 'index' %>
+      <%= auto_discovery_link_tag(:atom, search_url(format: :atom, q: params[:q]), title: content_for(:title)) %>
+    <% end %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
