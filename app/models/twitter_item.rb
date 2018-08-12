@@ -1,6 +1,6 @@
 class TwitterItem < Item
   class << self
-    include Twitter::Autolink
+    include Twitter::TwitterText::Autolink
 
     def from_tweet(tweet)
       html = auto_link_with_json(tweet.text, tweet.to_hash[:entities], {
