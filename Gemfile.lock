@@ -144,7 +144,7 @@ GEM
     rails-assets-crypto-js (3.1.9.1)
     rails-assets-jquery (3.3.1)
     rails-assets-store (2.7.1)
-    rails-assets-tether (1.4.3)
+    rails-assets-tether (1.4.7)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
