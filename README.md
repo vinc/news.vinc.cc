@@ -18,4 +18,4 @@ https://news.vinc.cc
 
 ## License
 
-Copyright (c) 2017 Vincent Ollivier. Released under MIT.
+Copyright (c) 2017-2020 Vincent Ollivier. Released under MIT.
