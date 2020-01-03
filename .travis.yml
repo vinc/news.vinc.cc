@@ -2,5 +2,7 @@ language: ruby
 services:
   - mongodb
   - redis
+before_install:
+  - sudo apt-get -y install libldap2-dev libidn11-dev
 script:
   - bundle exec rake spec
