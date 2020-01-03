@@ -24,12 +24,10 @@ class WikipediaItem < Item
       html: html
     )
   end
+end
 
-  private
-
-  class WikiParser < WikiCloth::Parser
-    url_for do |page|
-      "https://en.wikipedia.org/wiki/#{page}"
-    end
+class WikiParser < WikiCloth::Parser
+  url_for do |page|
+    "https://en.wikipedia.org/wiki/#{page}"
   end
 end
