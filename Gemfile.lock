@@ -1,3 +1,14 @@
+GIT
+  remote: https://github.com/nricciar/wikicloth.git
+  revision: 54ad028e541bf5314433712e5cf90d3bd515cf93
+  specs:
+    wikicloth (0.8.3)
+      builder
+      expression_parser
+      htmlentities
+      nokogiri
+      twitter-text (>= 2.1)
+
 GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
@@ -258,12 +269,6 @@ GEM
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
-    wikicloth (0.8.3)
-      builder
-      expression_parser
-      htmlentities
-      nokogiri
-      twitter-text
     xpath (3.2.0)
       nokogiri (~> 1.8)
 
@@ -297,7 +302,7 @@ DEPENDENCIES
   tzinfo-data
   uglifier (>= 1.3.0)
   web-console (>= 3.3.0)
-  wikicloth
+  wikicloth!
 
 RUBY VERSION
    ruby 2.6.2p47

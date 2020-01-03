@@ -57,7 +57,7 @@ gem 'redis-rails'
 gem 'twitter'
 gem 'twitter-text'
 gem 'rest-client'
-gem 'wikicloth'
+gem 'wikicloth', github: 'nricciar/wikicloth' # last gem release v0.8.3 is outdated
 gem 'bootstrap', '4.0.0.alpha6'
 
 source 'https://rails-assets.org' do
