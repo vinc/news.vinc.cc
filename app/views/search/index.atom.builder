@@ -1,6 +1,9 @@
 atom_feed do |feed|
   feed.title("News from #{@query}")
   feed.updated(Time.zone.now)
+  feed.author do |author|
+    author.name(@source)
+  end
 
   @results.each do |item|
     feed.entry(item, { id: item.via, url: item.via }) do |entry|
