@@ -6,10 +6,10 @@ atom_feed do |feed|
   end
 
   @results.each do |item|
-    feed.entry(item, { id: item.via, url: item.via }) do |entry|
+    feed.entry(item, id: item.via, url: item.via) do |entry|
       entry.title(item.title)
-      entry.content(item.html, type: 'html') if item.html
-      entry.link(item.url, { rel: 'related' }) if item.url
+      entry.content(item.html, type: 'text/html') if item.html
+      entry.link(rel: 'related', type: 'text/html', href: item.url) if item.url
 
       if item.author
         entry.author do |author|
