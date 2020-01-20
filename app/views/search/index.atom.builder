@@ -11,8 +11,10 @@ atom_feed do |feed|
       entry.content(item.html, type: 'html') if item.html
       entry.link(item.url, { rel: 'related' }) if item.url
 
-      entry.author do |author|
-        author.name(item.author) if item.author
+      if item.author
+        entry.author do |author|
+          author.name(item.author)
+        end
       end
     end
   end
