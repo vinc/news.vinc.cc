@@ -3,6 +3,7 @@
 ## 2020-01-31
 ### Fixed
 - Generate valid atom feeds (#57)
+- Fix atom content type (#63)
 ### Changed
 - Upgrade to rails 5.1 (#62)
 - Switch to sassc-rails (#61)
