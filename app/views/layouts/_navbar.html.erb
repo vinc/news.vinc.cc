@@ -12,8 +12,10 @@
       <%= render 'search/form' %>
     <% end %>
 
-    <div class="navbar-nav ml-auto">
-        <%= link_to 'Settings', edit_settings_path, class: "nav-item nav-link pb-0 pr-0 ml-2 #{content_for(:page) == 'settings' ? 'active' : ''}" %>
-    </div>
+    <% if database_present? %>
+      <div class="navbar-nav ml-auto">
+          <%= link_to 'Settings', edit_settings_path, class: "nav-item nav-link pb-0 pr-0 ml-2 #{content_for(:page) == 'settings' ? 'active' : ''}" %>
+      </div>
+    <% end %>
   </div>
 </nav>
