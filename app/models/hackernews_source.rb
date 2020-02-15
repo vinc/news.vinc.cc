@@ -80,7 +80,7 @@ class HackernewsSource < Source
       numericFilters: "created_at_i>#{created_after}"
     }
 
-    url = 'http://hn.algolia.com/api/v1/search'
+    url = 'https://hn.algolia.com/api/v1/search'
     res = RestClient.get(url, params: params)
     json = JSON.parse(res.body)
 
