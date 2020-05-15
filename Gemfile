@@ -58,7 +58,7 @@ gem 'twitter'
 gem 'twitter-text'
 gem 'rest-client'
 gem 'wikicloth', github: 'nricciar/wikicloth' # last gem release v0.8.3 is outdated
-gem 'bootstrap', '4.0.0.alpha6'
+gem 'bootstrap', '4.4.1'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.3.3'
