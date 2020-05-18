@@ -68,6 +68,6 @@ source 'https://rails-assets.org' do
 end
 
 group :test do
-  gem 'rspec-rails', '~> 3.5'
+  gem 'rspec-rails', '~> 4.0'
   gem 'capybara'
 end
