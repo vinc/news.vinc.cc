@@ -1,15 +1,11 @@
-# frozen_string_literal: true
-
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV["RAILS_ENV"] ||= "test"
-require File.expand_path("../config/environment", __dir__)
+require 'spec_helper'
+ENV['RAILS_ENV'] ||= 'test'
+require_relative '../config/environment'
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
-require "spec_helper"
-require "rspec/rails"
+require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
-
-require "capybara/rails"
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -24,9 +20,19 @@ require "capybara/rails"
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-# Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+# Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
 
 RSpec.configure do |config|
+  # Remove this line to enable support for ActiveRecord
+  config.use_active_record = false
+
+  # If you enable ActiveRecord support you should unncomment these lines,
+  # note if you'd prefer not to run each example within a transaction, you
+  # should set use_transactional_fixtures to false.
+  #
+  # config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  # config.use_transactional_fixtures = true
+
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
   # `post` in specs under `spec/controllers`.
@@ -34,7 +40,7 @@ RSpec.configure do |config|
   # You can disable this behaviour by removing the line below, and instead
   # explicitly tag your specs with their type, e.g.:
   #
-  #     RSpec.describe UsersController, :type => :controller do
+  #     RSpec.describe UsersController, type: :controller do
   #       # ...
   #     end
   #
