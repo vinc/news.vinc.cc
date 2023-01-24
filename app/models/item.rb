@@ -3,7 +3,7 @@
 class Item
   include ActiveModel::Model
 
-  attr_accessor :author, :created_at, :updated_at, :title, :text, :html, :image, :url, :via, :counts
+  attr_accessor :author, :created_at, :title, :text, :html, :image, :url, :via, :counts
 
   def self.from_hash(_hash)
     new # Extract attributes from hash and pass them to the initializer
