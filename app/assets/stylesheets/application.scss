@@ -14,7 +14,7 @@
  *= require_self
  */
 
-$brand-primary: #0A7;
+$primary: #0A7;
 $input-color: #292b2c; // $gray-dark
 
 @import "bootstrap";
@@ -42,10 +42,10 @@ body#home > .container {
   }
 }
 
-.navbar-inverse .navbar-nav .nav-link {
+.navbar-dark .navbar-nav .nav-link {
   color: rgba(255, 255, 255, 0.8);
 }
-.navbar-inverse .navbar-nav .nav-link:hover {
+.navbar-dark .navbar-nav .nav-link:hover {
   color: rgba(255, 255, 255, 0.9);
 }
 
@@ -59,7 +59,7 @@ body#home > .container {
 }
 
 .turbolinks-progress-bar {
-  background-color: lighten($brand-primary, 25%);
+  background-color: lighten($primary, 25%);
 }
 
 span.twitter-typeahead {
