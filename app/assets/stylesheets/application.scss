@@ -70,11 +70,11 @@ span.twitter-typeahead {
   .tt-input::selection,
   .tt-cursor {
     color: inherit !important;
-    background-color: $input-border-focus !important;
+    background-color: $input-focus-border-color !important;
   }
 
   .tt-hint {
-    color: $input-color-placeholder;
+    color: $input-placeholder-color;
   }
 
   .tt-menu {
@@ -93,5 +93,5 @@ span.twitter-typeahead {
 
 // Harmonize background color of selection in input
 input::selection {
-  background-color: $input-border-focus !important;
+  background-color: $input-focus-border-color !important;
 }
