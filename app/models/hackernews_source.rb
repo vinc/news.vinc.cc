@@ -57,7 +57,7 @@ class HackernewsSource < Source
     limit = @filters[:limits].include?(options[:limit]) ? options[:limit] : 30
     sort = @filters[:sorts].include?(options[:sort]) ? options[:sort] : :hot
 
-    url = 'http://node-hnapi.herokuapp.com/news'
+    url = 'https://api.hackerwebapp.com/news'
     res = RestClient.get(url)
     items = JSON.parse(res.body)
     items = items.sort_by { |item| -(item['points'] || 0) } if sort == :top
