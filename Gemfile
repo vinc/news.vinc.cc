@@ -78,5 +78,5 @@ end
 
 group :test do
   gem "capybara"
-  gem "rspec-rails", "~> 3.5"
+  gem "rspec-rails", "~> 5.0.0"
 end
