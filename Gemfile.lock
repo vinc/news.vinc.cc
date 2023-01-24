@@ -253,6 +253,18 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.24.1)
       parser (>= 3.1.1.0)
+    rubocop-capybara (2.17.0)
+      rubocop (~> 1.41)
+    rubocop-performance (1.15.2)
+      rubocop (>= 1.7.0, < 2.0)
+      rubocop-ast (>= 0.4.0)
+    rubocop-rails (2.17.4)
+      activesupport (>= 4.2.0)
+      rack (>= 1.1)
+      rubocop (>= 1.33.0, < 2.0)
+    rubocop-rspec (2.18.1)
+      rubocop (~> 1.33)
+      rubocop-capybara (~> 2.17)
     ruby-progressbar (1.11.0)
     ruby_dep (1.5.0)
     sass (3.7.4)
@@ -342,6 +354,9 @@ DEPENDENCIES
   rest-client
   rspec-rails (~> 3.5)
   rubocop
+  rubocop-performance
+  rubocop-rails
+  rubocop-rspec
   sassc-rails
   spring
   spring-watcher-listen (~> 2.0.0)
