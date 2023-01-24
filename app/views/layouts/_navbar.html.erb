@@ -1,21 +1,23 @@
 <nav class="navbar navbar-expand navbar-dark bg-primary <%= content_for(:page) == 'home' ? '' : 'mb-3' %>">
-  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+  <div class="container-fluid">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-  <% unless content_for(:page) == 'home' %>
-  <a class="navbar-brand" href="/">News</a>
-  <% end %>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <% unless content_for(:page) == 'home' %>
-      <%= render 'search/form' %>
+    <a class="navbar-brand" href="/">News</a>
     <% end %>
 
-    <% if database_present? %>
-      <div class="navbar-nav ml-auto">
-          <%= link_to 'Settings', edit_settings_path, class: "nav-item nav-link pb-0 pr-0 ml-2 #{content_for(:page) == 'settings' ? 'active' : ''}" %>
-      </div>
-    <% end %>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <% unless content_for(:page) == 'home' %>
+        <%= render 'search/form' %>
+      <% end %>
+
+      <% if database_present? %>
+        <div class="navbar-nav ml-auto">
+            <%= link_to 'Settings', edit_settings_path, class: "nav-item nav-link pb-0 pr-0 ml-2 #{content_for(:page) == 'settings' ? 'active' : ''}" %>
+        </div>
+      <% end %>
+    </div>
   </div>
 </nav>
