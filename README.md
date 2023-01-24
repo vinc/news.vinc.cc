@@ -67,4 +67,4 @@ future this will be integrated in the app.
 
 ## License
 
-Copyright (c) 2017-2020 Vincent Ollivier. Released under MIT.
+Copyright (c) 2017-2023 Vincent Ollivier. Released under MIT.
