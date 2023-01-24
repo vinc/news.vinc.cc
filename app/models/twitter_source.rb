@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TwitterSource < Source
   def initialize
     @title = "Twitter"
@@ -21,7 +23,7 @@ class TwitterSource < Source
     options.delete(:sort)
 
     # merge the remaining options with the query
-    query = args[1..-1].join("+") + " " + options.map { |a| a.join(":") }.join(" ")
+    query = args[1..].join("+") + " " + options.map { |a| a.join(":") }.join(" ")
 
     client = Twitter::REST::Client.new do |config|
       config.consumer_key    = ENV["TWITTER_KEY"]

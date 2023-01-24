@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TwitterItem < Item
   def self.from_tweet(tweet)
     html = auto_link_with_json(tweet.text, tweet.to_hash[:entities], {

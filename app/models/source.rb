@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Source
   attr_reader :filters, :title, :url, :source_title, :source_url
 
@@ -44,7 +46,7 @@ class Source
     current_word = words.size > 1 ? words.pop : ""
     query = words.join(" ")
 
-    @filters.keys.each do |filter|
+    @filters.each_key do |filter|
       name = filter.to_s.singularize
       suggestions += @filters[filter].map { |s| "#{name}:#{s}" } unless query["#{name}:"]
     end

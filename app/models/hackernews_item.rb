@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class HackernewsItem < Item
   def self.from_hash(hash)
     via = "https://news.ycombinator.com/item?id=#{hash['id'] || hash['objectID']}"

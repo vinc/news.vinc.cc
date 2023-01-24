@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NewsapiItem < Item
   def self.from_hash(hash)
     time = hash["publishedAt"] ? Time.parse(hash["publishedAt"]) : nil

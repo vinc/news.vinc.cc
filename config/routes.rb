@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   resource :user, only: %i[show create update destroy] do
     resources :permalinks, only: %i[index show create destroy]

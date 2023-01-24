@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WikipediaItem < Item
   def self.from_hash(hash)
     created_at = nil

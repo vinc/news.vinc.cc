@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SearchHelper
   # Create a custom links for queries
   #

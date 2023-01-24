@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BSON
   class ObjectId
     def to_json(*_args)

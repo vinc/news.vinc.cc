@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RedditSource < Source
   def initialize
     @title = "Reddit"
@@ -21,7 +23,7 @@ class RedditSource < Source
 
     sort = @filters[:sorts].include?(options[:sort]) ? options[:sort] : :hot
 
-    subreddits = args[1..-1].join("+")
+    subreddits = args[1..].join("+")
     url = "https://www.reddit.com/r/#{subreddits}/#{sort}.json"
     res = RestClient.get(url, params: params)
     json = JSON.parse(res.body)

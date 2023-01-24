@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RedditItem < Item
   def self.from_hash(hash)
     image = nil

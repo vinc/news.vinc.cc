@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class QueriesController < ApplicationController
   before_action :authenticate
   before_action :set_query, only: %i[show destroy]

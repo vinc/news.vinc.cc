@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PermalinksController < ApplicationController
   before_action :authenticate
   before_action :set_permalink, only: %i[show destroy]

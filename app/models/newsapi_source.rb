@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NewsapiSource < Source
   def initialize
     @title = "News API"

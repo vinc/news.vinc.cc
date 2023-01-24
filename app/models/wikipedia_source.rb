@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WikipediaSource < Source
   def initialize
     @title = "Wikipedia"

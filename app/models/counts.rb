@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Counts
   include ActiveModel::Model
 

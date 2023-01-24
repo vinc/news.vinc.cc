@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class HackernewsSource < Source
   def initialize
     @title = "Hacker News"
@@ -74,7 +76,7 @@ class HackernewsSource < Source
     created_after = time == :all ? 0 : (Time.zone.now - 1.send(time)).to_i
 
     params = {
-      query: args[1..-1].join(" "),
+      query: args[1..].join(" "),
       tags: "story",
       hitsPerPage: limit,
       numericFilters: "created_at_i>#{created_after}"
