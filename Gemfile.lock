@@ -63,9 +63,10 @@ GEM
     bindex (0.8.1)
     bootsnap (1.15.0)
       msgpack (~> 1.2)
-    bootstrap (4.0.0.alpha6)
+    bootstrap (4.0.0)
       autoprefixer-rails (>= 6.0.3)
-      sass (>= 3.4.19)
+      popper_js (>= 1.12.9, < 2)
+      sass (>= 3.5.2)
     bson (4.15.0)
     buftok (0.2.0)
     builder (3.2.4)
@@ -155,6 +156,7 @@ GEM
     parallel (1.22.1)
     parser (3.2.0.0)
       ast (~> 2.4.1)
+    popper_js (1.16.1)
     public_suffix (5.0.0)
     puma (4.3.12)
       nio4r (~> 2.0)
@@ -336,7 +338,7 @@ PLATFORMS
 
 DEPENDENCIES
   bootsnap
-  bootstrap (= 4.0.0.alpha6)
+  bootstrap (= 4.0.0)
   byebug
   capybara
   jbuilder (~> 2.5)
