@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 class RedditSource < Source
   def initialize
-    @title = 'Reddit'
-    @url = 'https://www.reddit.com'
+    @title = "Reddit"
+    @url = "https://www.reddit.com"
     @filters = {
-      sorts: %i(new hot top rising controversial),
-      times: %i(hour day week month year all),
+      sorts: %i[new hot top rising controversial],
+      times: %i[hour day week month year all],
       limits: 1..100
     }
   end
 
   # https://www.reddit.com/dev/api
-  def request(args, options={})
+  def request(args, options = {})
     params = {}
 
     params[:limit] = @filters[:limits].include?(options[:limit]) ? options[:limit] : 25
@@ -21,11 +23,11 @@ class RedditSource < Source
 
     sort = @filters[:sorts].include?(options[:sort]) ? options[:sort] : :hot
 
-    subreddits = args[1..-1].join('+')
+    subreddits = args[1..].join("+")
     url = "https://www.reddit.com/r/#{subreddits}/#{sort}.json"
-    res = RestClient.get(url, :params => params)
+    res = RestClient.get(url, params: params)
     json = JSON.parse(res.body)
-    items = json['data']['children']
+    items = json["data"]["children"]
 
     items.map do |item|
       RedditItem.from_hash(item)
@@ -33,9 +35,9 @@ class RedditSource < Source
   rescue RestClient::NotFound
   end
 
-  def get_suggestions(query)
-    Rails.cache.fetch('reddit:suggestions', expires_in: 1.day) do
-      url = 'https://www.reddit.com/subreddits/popular.json'
+  def get_suggestions(_query)
+    Rails.cache.fetch("reddit:suggestions", expires_in: 1.day) do
+      url = "https://www.reddit.com/subreddits/popular.json"
       subreddits = []
       after = nil
 
@@ -43,9 +45,9 @@ class RedditSource < Source
         params = { limit: 100, count: subreddits.size, after: after }
         res = RestClient.get(url, params: params)
         json = JSON.parse(res.body)
-        after = json['data']['after']
-        json['data']['children'].each do |child|
-          subreddits << child['data']['display_name'].downcase
+        after = json["data"]["after"]
+        json["data"]["children"].each do |child|
+          subreddits << child["data"]["display_name"].downcase
         end
       end
 

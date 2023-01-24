@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationCable
   class Connection < ActionCable::Connection::Base
     identified_by :current_user
@@ -10,11 +12,7 @@ module ApplicationCable
       token = request.params[:token]
       message = "#{request.method} #{request.path}"
 
-      if user = User.find_with_hmac(token, message)
-        user
-      else
-        reject_unauthorized_connection
-      end
+      User.find_with_hmac(token, message) || reject_unauthorized_connection
     end
   end
 end

@@ -1,8 +1,9 @@
-class UsersController < ApplicationController
-  before_action :authenticate, except: %i(create)
+# frozen_string_literal: true
 
-  def show
-  end
+class UsersController < ApplicationController
+  before_action :authenticate, except: %i[create]
+
+  def show; end
 
   def create
     @current_user = User.create

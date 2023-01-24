@@ -1,24 +1,25 @@
+# frozen_string_literal: true
+
 class PermalinksController < ApplicationController
   before_action :authenticate
-  before_action :set_permalink, only: %i(show destroy)
+  before_action :set_permalink, only: %i[show destroy]
 
   def index
     @permalinks = @current_user.permalinks
   end
 
-  def show
-  end
+  def show; end
 
   def create
     @permalink = @current_user.permalinks.find_or_create_by(permalink_params)
-    SyncChannel.broadcast_to(@current_user, @permalink.as_document.merge(action: 'read'))
+    SyncChannel.broadcast_to(@current_user, @permalink.as_document.merge(action: "read"))
     respond_to do |format|
       format.json { render :show, status: :created, location: user_permalinks_url(@permalink, format: :json) }
     end
   end
 
   def destroy
-    SyncChannel.broadcast_to(@current_user, @permalink.as_document.merge(action: 'unread'))
+    SyncChannel.broadcast_to(@current_user, @permalink.as_document.merge(action: "unread"))
     @permalink.destroy
     respond_to :json
   end

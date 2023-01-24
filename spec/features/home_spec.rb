@@ -1,9 +1,11 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
-RSpec.feature 'Home', type: :feature do
-  scenario 'User visits the homepage' do
-    visit '/'
+require "rails_helper"
 
-    expect(page).to have_text('Search the news')
+RSpec.feature "Home", type: :feature do
+  scenario "User visits the homepage" do
+    visit "/"
+
+    expect(page).to have_text("Search the news")
   end
 end
