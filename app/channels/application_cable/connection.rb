@@ -10,7 +10,7 @@ module ApplicationCable
       token = request.params[:token]
       message = "#{request.method} #{request.path}"
 
-      if user = User.find_with_hmac(token, message)
+      if (user = User.find_with_hmac(token, message))
         user
       else
         reject_unauthorized_connection

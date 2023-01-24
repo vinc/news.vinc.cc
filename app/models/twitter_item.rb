@@ -1,11 +1,11 @@
 class TwitterItem < Item
   def self.from_tweet(tweet)
     html = auto_link_with_json(tweet.text, tweet.to_hash[:entities], {
-      hashtag_url_base:        '/search?q=twitter+%23',
-      username_url_base:       '/search?q=twitter+@',
-      username_include_symbol: true,
-      suppress_no_follow:      true
-    })
+                                 hashtag_url_base: "/search?q=twitter+%23",
+                                 username_url_base: "/search?q=twitter+@",
+                                 username_include_symbol: true,
+                                 suppress_no_follow: true
+                               })
     html = "<p>#{html}</p>"
     image = nil
     tweet.media.each do |media|
@@ -15,7 +15,7 @@ class TwitterItem < Item
       end
     end
 
-    self.new(
+    new(
       author: tweet.user.screen_name,
       created_at: tweet.created_at.dup,
       text: tweet.text,

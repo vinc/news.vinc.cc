@@ -1,8 +1,7 @@
 class UsersController < ApplicationController
-  before_action :authenticate, except: %i(create)
+  before_action :authenticate, except: %i[create]
 
-  def show
-  end
+  def show; end
 
   def create
     @current_user = User.create

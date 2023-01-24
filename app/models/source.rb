@@ -6,17 +6,20 @@ class Source
   end
 
   def search(query)
-    before_search(query) if self.respond_to?(:before_search)
+    before_search(query) if respond_to?(:before_search)
 
     opts = {}
-    args = query.split.reduce([]) do |acc, word|
+    args = query.split.each_with_object([]) do |word, acc|
       case word
       when /(\w+):(\w+)/
-        opts[$1.to_sym] = Integer($2) rescue $2.to_sym
+        opts[::Regexp.last_match(1).to_sym] = begin
+          Integer(::Regexp.last_match(2))
+        rescue StandardError
+          ::Regexp.last_match(2).to_sym
+        end
       else
         acc << word
       end
-      acc
     end
 
     Rails.cache.fetch(query, expires_in: 5.minutes) do
@@ -24,28 +27,26 @@ class Source
     end
   end
 
-  def request(args, opts={})
+  def request(_args, _opts = {})
     []
   end
 
-  def get_suggestions(query)
+  def get_suggestions(_query)
     []
   end
 
   def autocomplete(query)
-    before_autocomplete(query) if self.respond_to?(:before_autocomplete)
+    before_autocomplete(query) if respond_to?(:before_autocomplete)
 
-    suggestions = self.get_suggestions(query)
+    suggestions = get_suggestions(query)
 
-    words = query.split(' ', -1)
-    current_word = words.size > 1 ? words.pop : ''
-    query = words.join(' ')
+    words = query.split(" ", -1)
+    current_word = words.size > 1 ? words.pop : ""
+    query = words.join(" ")
 
     @filters.keys.each do |filter|
       name = filter.to_s.singularize
-      unless query["#{name}:"]
-        suggestions += @filters[filter].map { |s| "#{name}:#{s}" }
-      end
+      suggestions += @filters[filter].map { |s| "#{name}:#{s}" } unless query["#{name}:"]
     end
 
     suggestions.delete_if do |suggestion|
@@ -56,14 +57,14 @@ class Source
   end
 
   def to_s
-    self.class.to_s.downcase.sub('source', '')
+    self.class.to_s.downcase.sub("source", "")
   end
 
   ALIASES = {
-    'hn' => 'hackernews',
-    'r'  => 'reddit',
-    't'  => 'twitter',
-    'w'  => 'wikipedia'
+    "hn" => "hackernews",
+    "r" => "reddit",
+    "t" => "twitter",
+    "w" => "wikipedia"
   }.freeze
 
   # 'hackernews time:week' will return an instance of HackernewsSource

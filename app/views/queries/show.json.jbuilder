@@ -1,1 +1,1 @@
-json.partial! 'queries/query', query: @query
+json.partial! "queries/query", query: @query

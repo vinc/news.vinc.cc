@@ -1,1 +1,1 @@
-json.array! @results, partial: 'search/item', as: :item
+json.array! @results, partial: "search/item", as: :item

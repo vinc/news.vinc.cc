@@ -1,1 +1,1 @@
-json.partial! 'permalinks/permalink', permalink: @permalink
+json.partial! "permalinks/permalink", permalink: @permalink

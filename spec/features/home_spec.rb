@@ -1,9 +1,9 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.feature 'Home', type: :feature do
-  scenario 'User visits the homepage' do
-    visit '/'
+RSpec.feature "Home", type: :feature do
+  scenario "User visits the homepage" do
+    visit "/"
 
-    expect(page).to have_text('Search the news')
+    expect(page).to have_text("Search the news")
   end
 end

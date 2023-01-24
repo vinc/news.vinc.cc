@@ -1,1 +1,1 @@
-json.array! @queries, partial: 'queries/query', as: :query
+json.array! @queries, partial: "queries/query", as: :query

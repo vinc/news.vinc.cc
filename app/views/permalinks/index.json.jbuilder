@@ -1,1 +1,1 @@
-json.array! @permalinks, partial: 'permalinks/permalink', as: :permalink
+json.array! @permalinks, partial: "permalinks/permalink", as: :permalink
