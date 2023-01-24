@@ -1,5 +1,11 @@
 # Changelog
 
+## 2022-11-30
+### Changed
+- Change Hacker News API URL
+- Update ruby to 2.7.6
+- Update rails to 5.2.8.1
+
 ## 2020-01-31
 ### Fixed
 - Generate valid atom feeds (#57)
