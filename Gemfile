@@ -60,7 +60,7 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
-gem "bootstrap", "~> 5.2.0"
+gem "bootstrap", "~> 5.2.3"
 gem "mongoid", "~> 6.1.0"
 gem "redis"
 gem "redis-rails"
