@@ -1,4 +1,4 @@
-<hr class="sr-only">
+<hr class="visually-hidden">
 <article class="card mb-3" data-url="<%= item.via %>">
   <div class="card-header">
     <div class="row text-muted">
@@ -6,16 +6,16 @@
         <%= @source.title %>
       </div>
       <% if item.created_at %>
-        <div class="col text-right">
+        <div class="col text-end">
           <%= time_tag(item.created_at, time_ago_in_words(item.created_at)) %>
         </div>
       <% end %>
     </div>
   </div>
 
-  <div class="card-block">
+  <div class="card-body">
     <% if item.title %>
-      <h4 class="card-title"><a href="<%= item.url %>"><%= item.title %></a></h4>
+      <h4 class="card-title"><a class="text-decoration-none" href="<%= item.url %>"><%= item.title %></a></h4>
     <% end %>
 
     <% if item.html %>
@@ -32,7 +32,7 @@
 
     <% if item.counts %>
       <% item.counts.each do |k, v| %>
-        <a class="card-link text-muted" href="<%= item.via %>">
+        <a class="card-link text-decoration-none text-muted" href="<%= item.via %>">
           <%= number_to_human(v) %>
           <%= k.pluralize(v) %>
         </a>
