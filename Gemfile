@@ -61,7 +61,7 @@ end
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
 gem "bootstrap", "~> 5.2.3"
-gem "mongoid", "~> 6.1.0"
+gem "mongoid", "~> 8.0.3"
 gem "redis"
 gem "redis-rails"
 gem "rest-client"
