@@ -15,7 +15,11 @@
  */
 
 $primary: #0A7;
-$input-color: #292b2c; // $gray-dark
+//$input-color: #292b2c; // $gray-dark
+$color-mode-type: media-query;
+$link-color-dark: $primary;
+$link-decoration: none;
+$link-hover-decoration: underline;
 
 @import "bootstrap";
 
@@ -42,12 +46,14 @@ body#home > .container {
   }
 }
 
+/*
 .navbar-dark .navbar-nav .nav-link {
   color: rgba(255, 255, 255, 0.8);
 }
 .navbar-dark .navbar-nav .nav-link:hover {
   color: rgba(255, 255, 255, 0.9);
 }
+*/
 
 @include media-breakpoint-down(md) {
   .navbar.search-focused {

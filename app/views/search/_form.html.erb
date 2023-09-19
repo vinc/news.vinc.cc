@@ -1,4 +1,4 @@
-<form method="get" action="/search" style="width:100%">
+<form method="get" action="/search" style="width:100%" data-bs-theme="light">
   <input autocomplete="off" name="q" value="<%= content_for(:query) %>" class="form-control <%= content_for(:page) == 'home' ? 'form-control-lg' : '' %>" type="search" placeholder="Search" aria-label="Query">
   <button type="submit" class="btn btn-primary visually-hidden">Search</button>
 </form>
