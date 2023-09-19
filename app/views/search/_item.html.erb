@@ -24,7 +24,7 @@
       </div>
     <% end %>
 
-    <% if item.image %>
+    <% if item.image && thumbnailer_present? %>
       <p class="card-text text-center mt-3">
         <%= image_tag thumb_url(item.image, geometry: '800x800'), alt: 'image', class: 'img-fluid' %>
       </p>

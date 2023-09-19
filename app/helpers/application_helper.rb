@@ -6,4 +6,8 @@ module ApplicationHelper
   def database_present?
     ENV["MONGO_URL"].present?
   end
+
+  def thumbnailer_present?
+    ENV["REHOST_URL"].present?
+  end
 end
