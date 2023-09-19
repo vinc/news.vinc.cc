@@ -10,17 +10,8 @@ GIT
       twitter-text (>= 2.1)
 
 GEM
-  remote: https://rails-assets.org/
-  specs:
-    rails-assets-core-typeahead (1.2.1)
-      rails-assets-jquery (>= 1.11)
-    rails-assets-crypto-js (3.1.9.1)
-    rails-assets-jquery (3.6.1)
-    rails-assets-store (2.14.2)
-    rails-assets-tether (2.0.0)
-
-GEM
   remote: https://rubygems.org/
+  remote: https://rails-assets.org/
   specs:
     actioncable (5.2.8.1)
       actionpack (= 5.2.8.1)
@@ -185,6 +176,12 @@ GEM
       bundler (>= 1.3.0)
       railties (= 5.2.8.1)
       sprockets-rails (>= 2.0.0)
+    rails-assets-core-typeahead (1.2.1)
+      rails-assets-jquery (>= 1.11)
+    rails-assets-crypto-js (3.1.9.1)
+    rails-assets-jquery (3.6.1)
+    rails-assets-store (2.14.2)
+    rails-assets-tether (2.0.0)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
@@ -367,7 +364,7 @@ DEPENDENCIES
   wikicloth!
 
 RUBY VERSION
-   ruby 2.7.6p219
+   ruby 2.7.7p221
 
 BUNDLED WITH
    2.1.4
