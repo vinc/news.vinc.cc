@@ -58,7 +58,7 @@ group :development do
 end
 
 gem "bootstrap", "~> 5.3.1"
-gem "mongoid", "~> 6.1.0"
+gem "mongoid", "~> 8.1.2"
 gem "redis"
 gem "redis-rails"
 gem "rest-client"
