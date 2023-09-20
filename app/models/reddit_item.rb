@@ -16,7 +16,7 @@ class RedditItem < Item
     new(
       author: hash["data"]["author"],
       created_at: Time.at(hash["data"]["created_utc"].to_i),
-      title: hash["data"]["title"],
+      title: CGI.unescapeHTML(hash["data"]["title"]),
       url: hash["data"]["url"],
       via: "https://www.reddit.com#{hash['data']['permalink']}",
       image: image,
