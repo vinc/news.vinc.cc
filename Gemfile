@@ -57,9 +57,6 @@ group :development do
   gem "rubocop-rspec"
 end
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
-
 gem "bootstrap", "~> 5.3.1"
 gem "mongoid", "~> 6.1.0"
 gem "redis"
@@ -68,6 +65,7 @@ gem "rest-client"
 gem "twitter"
 gem "twitter-text"
 gem "wikicloth", github: "nricciar/wikicloth" # last gem release v0.8.3 is outdated
+gem "rss"
 
 source "https://rails-assets.org" do
   gem "rails-assets-core-typeahead"

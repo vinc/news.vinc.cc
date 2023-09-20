@@ -64,6 +64,7 @@ class Source
 
   ALIASES = {
     "hn" => "hackernews",
+    "ih" => "indiehackers",
     "r" => "reddit",
     "t" => "twitter",
     "w" => "wikipedia"

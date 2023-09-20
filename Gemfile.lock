@@ -260,6 +260,8 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.12.1)
+    rss (0.3.0)
+      rexml
     rubocop (1.56.3)
       base64 (~> 0.1.1)
       json (~> 2.3)
@@ -372,6 +374,7 @@ DEPENDENCIES
   redis-rails
   rest-client
   rspec-rails (~> 5.1)
+  rss
   rubocop
   rubocop-performance
   rubocop-rails
@@ -382,7 +385,6 @@ DEPENDENCIES
   turbolinks (~> 5)
   twitter
   twitter-text
-  tzinfo-data
   uglifier (>= 1.3.0)
   web-console (>= 3.3.0)
   wikicloth!
